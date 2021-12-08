@@ -61,7 +61,39 @@ module.exports = {
         options: {
           name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
         }
-      }
+      },
+      {
+        test: /\.scss$/,
+        use: [
+          'vue-style-loader',
+          {
+            loader: 'css-loader',
+            options: { modules: true }
+          },
+          {
+            loader: 'sass-loader',
+            options: {
+              additionalData: `$color: red;`
+            }
+          }
+        ]
+      },
+      {
+        test: /\.sass$/,
+        use: [
+          'vue-style-loader',
+          'css-loader',
+          {
+            loader: 'sass-loader',
+            options: {
+              indentedSyntax: true,
+              sassOptions: {
+                indentedSyntax: true
+              }
+            }
+          }
+        ]
+      },
     ]
   },
   node: {

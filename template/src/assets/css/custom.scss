@@ -1,0 +1,80 @@
+@import "@/assets/css/variable.scss";
+@import "@/assets/css/style.scss";
+
+.content {
+  width: calc(100vw - 240px);
+  padding: 20px;
+  height: calc(100vh - 100px);
+  text-align: left;
+  background-color: $main-background;
+
+  :global {
+    .el-tabs__item {
+      font-weight: bold;
+      font-size: 22px;
+    }
+
+    .el-button {
+      padding: 10px;
+    }
+  }
+}
+
+.form {
+  background-color: $white-color;
+  padding: 15px;
+
+  :global {
+    // .el-form-item {
+    //   // span {
+    //   //   font-weight: bold;
+    //   //   font-size: 18px;
+    //   //   color: $font-color
+    //   // }
+    // }
+
+    .el-form-item__content {
+      line-height: unset;
+    }
+
+    .el-form-item__label {
+      font-weight: bold;
+      font-size: 18px;
+      color: $font-color-2;
+    }
+
+    .el-input__count-inner, .el-input__count {
+      font-size: 12px !important;
+    }
+  }
+}
+
+.center {
+  text-align: center;
+}
+
+.query {
+  display: inline-block;
+  margin: 15px 0px 0px 0px;
+
+  :global {
+    .el-input, .el-select {
+      width: 200px;
+    }
+
+    .el-date-editor--daterange.el-input, .el-date-editor--daterange.el-input__inner, .el-date-editor--timerange.el-input, .el-date-editor--timerange.el-input__inner {
+      width: 250px;
+    }
+  }
+
+  & label {
+    font-size: 18px;
+    font-weight: bold;
+  }
+
+  &-item {
+    display: inline-block;
+    margin-left: 10px;
+    margin-bottom: 10px;
+  }
+}

@@ -3,6 +3,10 @@
 // see http://vuejs-templates.github.io/webpack for documentation.
 
 const path = require('path')
+const env = require('./configmap')
+
+let dist = env.DIST_PATH.replace(/"/g, '');
+let publicPath = env.PUBLISH_PATH.replace(/"/g, '')
 
 module.exports = {
   dev: {
@@ -10,7 +14,16 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {},
+    proxyTable: {
+      '/api': {
+        target: "[your backend website]",
+        changeOrigin: true,
+        secure:false,
+        pathRewrite: {
+          '^/api': '/api'
+        }
+      }
+    },
 
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST
@@ -38,12 +51,12 @@ module.exports = {
 
   build: {
     // Template for index.html
-    index: path.resolve(__dirname, '../dist/index.html'),
+    index: path.resolve(__dirname, dist + '/index.html'),
 
     // Paths
-    assetsRoot: path.resolve(__dirname, '../dist'),
+    assetsRoot: path.resolve(__dirname, dist),
     assetsSubDirectory: 'static',
-    assetsPublicPath: '/',
+    assetsPublicPath: publicPath,
 
     /**
      * Source Maps
