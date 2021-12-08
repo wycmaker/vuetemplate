@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>template</title>
+    <!-- CSP css -->
+    <% for (var css in htmlWebpackPlugin.files.css) { %>
+      <link nonce="CD2A0D791B21FD3084CB8A3FEFA27EBEF27F5268490F8ADC85D241D4D50AC9FC==" href="<%= htmlWebpackPlugin.files.css[css] %>" rel="stylesheet">
+    <% } %>
+  </head>
+  <body>
+    <div id="app"></div>
+    <!-- built files will be auto injected -->
+    <!-- CSP javascript-->
+    <% for (key in htmlWebpackPlugin.files.js) { %>
+      <script type="text/javascript" nonce="CD2A0D791B21FD3084CB8A3FEFA27EBEF27F5268490F8ADC85D241D4D50AC9FC==" src="<%= htmlWebpackPlugin.files.js[key] %>"></script>
+    <% } %>
+    <!-- 引用static資料夾的檔案設定路徑方式(符合CSP規範) -->
+     <!-- <script type="text/javascript" nonce="CD2A0D791B21FD3084CB8A3FEFA27EBEF27F5268490F8ADC85D241D4D50AC9FC==" src="<%= htmlWebpackPlugin.options.path %>static/pdfmake.js"></script> -->
+  </body>
+</html>
