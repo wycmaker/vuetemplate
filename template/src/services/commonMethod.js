@@ -9,3 +9,9 @@ export class Common {
     return index + 1 + (currentPage - 1) * pageSize
   }
 }
+
+
+/** 定義Javascript Prototype **/
+String.prototype.getPath = function () {
+  return this.substring(2, this.length);
+}

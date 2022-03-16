@@ -18,13 +18,12 @@ axios.interceptors.request.use((config) => {
 
 axios.interceptors.response.use(response => {
   if (response.status && response.status == 200 && response.data.status == 'error') {
-    return;
+    return
   }
-  return response;
+  return response
 }, error => {
   const response = error.response;
   error.globalErrorProcess = () => {
-    
     if (response) {
       if (response.status === 401) {
         store.commit('clearUserInfo')
@@ -33,18 +32,18 @@ axios.interceptors.response.use(response => {
           type: 'danger',
           duration: 1000
         })
-        location.hash = '#/login';
+        location.hash = '#/login'
       }
     }
-    return Promise.resolve(error);
-  };
-
-  if(error.config.hasOwnProperty('catch') && error.config.catch == true) {
-    return Promise.reject(error);
+    return Promise.reject(error)
   }
 
-  return error.globalErrorProcess();
-});
+  if(error.config.hasOwnProperty('catch') && error.config.catch == true) {
+    return Promise.reject(error)
+  }
+
+  return error.globalErrorProcess()
+})
 
 export class ApiService {
   /**

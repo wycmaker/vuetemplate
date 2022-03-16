@@ -29,10 +29,102 @@ export function routerProcess() {
     Cookies.set('pages', parseInt(count) - 1, {samesite: 'lax'});
   }
 
+  setStore()
+
+  window.addEventListener("storage", function (e) {
+    var userInfo = localStorage.getItem('userInfo_template')
+    if(userInfo === null) {
+      var currentPath = this.window.location.hash.toLowerCase()
+      if(currentPath !== '#/login') router.push('/login')
+    } else {
+      setStore()
+      router.push('/').catch(()=>{})
+    }
+  })
+
+  let setRoute = false
+
+  /* 判斷是否有登入 */
+  router.beforeEach((to, from, next) => {
+    var userInfo = JSON.parse(localStorage.getItem('userInfo_template'))
+    var path = to.path.toUpperCase()
+    if(userInfo === null) {
+      // 未登入
+      if(path === '/LOGIN') next()
+      else next({path: '/login'})
+      setRoute = false
+    } else {
+      // 已登入
+
+      if(path === '/LOGIN') {
+        next({path: '/'})
+      } 
+      else {
+        var index = router.routes.findIndex(r => r.path.toLowerCase() === to.path)
+        if(index === -1) next({ path: '/' })
+        else next()
+      }
+
+      // 依權限更新路由
+      if(!setRoute) {
+        // let targetRoute = []
+
+        // if(userInfo !== null && userInfo.accountType !== 1) {
+        //   let authority = userInfo.authority.split(',')
+        //   let index = -1
+        //   if(!authority.includes('1') && !authority.includes('2') && !authority.includes('3')) {
+        //     index = routes.findIndex(r => r.path === '/ReportManage')
+        //     targetRoute.push(routes[index])
+        //   } 
+        //   if(!authority.includes('4')) {
+        //     index =  routes.findIndex(r => r.path === '/DoctorOrderFormula')
+        //     targetRoute.push(routes[index])
+        //   } 
+        //   if(!authority.includes('5') && !authority.includes('6')) { 
+        //     index = routes.findIndex(r => r.path === '/ImportQuery')
+        //     targetRoute.push(routes[index])
+        //   }
+        //   if(!authority.includes('7')) {
+        //     index = routes.findIndex(r => r.path === '/QuestionnaireList')
+        //     targetRoute.push(routes[index])
+        //   }
+        //   if(!authority.includes('8')) {
+        //     index = routes.findIndex(r => r.path === '/ChartExport')
+        //     targetRoute.push(routes[index])
+        //   }
+        //   if(!authority.includes('9')) {
+        //     index = routes.findIndex(r => r.path === '/UserManage')
+        //     targetRoute.push(routes[index])
+        //   }
+        //   if(!authority.includes('10')) {
+        //     index = routes.findIndex(r => r.path === '/GroupManage')
+        //     targetRoute.push(routes[index])
+        //   }
+        //   if(!authority.includes('12')) {
+        //     index = routes.findIndex(r => r.path === '/TemplateManage')
+        //     targetRoute.push(routes[index])
+        //   }
+        // }
+
+        // // 移除沒有權限的頁面
+        // targetRoute.forEach(item => {
+        //   router.removeRoute(item)
+        // })
+
+        setRoute = true
+      }
+    }
+  })
+}
+
+/**
+ * 設定使用者資訊
+ */
+function setStore() {
   const data = manager.getUserData()
 
   if (data) {
-    store.commit('setUserInfo', data);
+    store.commit('setUserInfo', data)
 
     const expiryDate = new Date(data.expiryDate)
     const now = new Date()
@@ -41,19 +133,4 @@ export function routerProcess() {
       store.commit('authenticate')
     }
   }
-
-  /* 判斷是否有登入 */
-  router.beforeEach((to, from, next) => {
-    var userInfo = JSON.parse(localStorage.getItem('userInfo'));
-    var path = to.path.toUpperCase();
-    if(userInfo === null) {
-      // 未登入
-      if(path === '/LOGIN') next();
-      else next({path: '/Login'});
-    } else {
-      // 已登入
-      if(path === '/LOGIN') next('/');
-      else next();
-    }
-  })
 }

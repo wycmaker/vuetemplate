@@ -1,65 +1,29 @@
 <template>
-  <div>
-    <template v-if="!showForget">
-      <h1>系統登入</h1>
-      <el-form :model="loginAttr" label-position="right" label-width="80px" ref="loginForm" :class="[$style.form, $style.loginForm]" v-loading="loading">
-        <el-form-item label="帳號：">
-          <el-input v-model="loginAttr.account"></el-input>
-        </el-form-item>
-        <el-form-item label="密碼：">
-          <el-input v-model="loginAttr.password" show-password></el-input>
-        </el-form-item>
-        <div>
-          <el-button type="primary" @click="login">登入</el-button>
-          <!-- <a @click="showForget = true">忘記密碼</a> -->
-        </div>
-      </el-form>
-    </template>
-    <template v-else>
-      <div :class="$style.forgetDiv">
-        <main-title need-back title="返回登入" @back="backToLogin"></main-title>
-        <el-form :model="forgetAttr" label-width="120px" label-position="right" ref="forgetForm" :rules="rules" :class="[$style.form, $style.forgetForm]" v-loading="loading">
-          <el-form-item label="帳號：" prop="account">
-            <el-input v-model="forgetAttr.account"></el-input>
-          </el-form-item>
-          <div :class="$style.center" v-if="!getValidateSuccess">
-            <el-button type="primary" @click="getValidateCode">取得驗證碼</el-button>
-          </div>
-          <template v-else>
-            <el-form-item label="舊密碼：" prop="oldPassword">
-              <el-input v-model="forgetAttr.oldPassword"></el-input>
-            </el-form-item>
-            <el-form-item label="新密碼：" prop="newPassword">
-              <el-input v-model="forgetAttr.newPassword"></el-input>
-            </el-form-item>
-            <el-form-item label="確認密碼：" prop="confirmPassword">
-              <el-input v-model="forgetAttr.newPassword"></el-input>
-            </el-form-item>
-            <el-form-item label="驗證碼：" prop="validateCode">
-              <el-input v-model="forgetAttr.validateCode">
-                <el-button slot="append" type="success">重新取得</el-button>
-              </el-input>
-              
-            </el-form-item>
-            <div :class="$style.center">
-              <el-button type="primary">確認修改</el-button>
-            </div>
-          </template>
-        </el-form>
-      </div>
-      
-    </template>
+  <div :class="$style.content">
+    <el-form :model="loginAttr" label-position="right" label-width="20px" ref="loginForm" @keyup.enter.native="login" :class="[$style.form, $style.loginForm]">
+      <el-form-item label="帳號" style="margin-bottom: 0px" label-width="95px">
+      </el-form-item>
+      <el-form-item label="" style="margin-bottom: 15px">
+        <el-input v-model="loginAttr.account"></el-input>
+      </el-form-item>
+      <el-form-item label="密碼" style="margin-bottom: 0px" label-width="95px">
+      </el-form-item>
+      <el-form-item label="" style="margin-bottom: 15px">
+        <el-input v-model="loginAttr.password" show-password></el-input>
+      </el-form-item>
+      <el-form-item label="" label-width="0px" style="text-align: center;margin-top: 30px">
+        <el-button :class="$style['btn-A']" @click="login" :disabled="loading">登　入</el-button>
+      </el-form-item>
+    </el-form>
   </div>
 </template>
 
 <script>
-import { MainTitle } from '@/services/componentLibrary'
 import { Info, ApiService } from '@/services'
 const infowindow = new Info()
 const apiService = new ApiService()
 
 export default {
-  components: { MainTitle },
   data() {
     return {
       loginAttr: {
@@ -67,32 +31,6 @@ export default {
         password: null
       },
       loading: false,
-      showForget: false,
-      forgetAttr: {
-        account: null,
-        oldPassword: null,
-        newPassword: null,
-        confirmPassword: null,
-        validateCode: null
-      },
-      getValidateSuccess: false,
-      rules: {
-        account: [
-          { required: true, message: '帳號不可為空', trigger: 'blur' }
-        ],
-        oldPassword: [
-          { required: true, message: '帳號不可為空', trigger: 'blur' },
-        ],
-        newPassword: [
-          { required: true, message: '帳號不可為空', trigger: 'blur' },
-        ],
-        confirmPassword: [
-          { required: true, message: '帳號不可為空', trigger: 'blur' },
-        ],
-        validateCode: [
-          { required: true, message: '帳號不可為空', trigger: 'blur' },
-        ]
-      }
     }
   },
   mounted() {
@@ -133,26 +71,8 @@ export default {
       delete info.token
       delete info.expiryDateTime
       this.$store.commit('setUserInfo', data);
-      localStorage.setItem('userInfo', JSON.stringify(info));
+      localStorage.setItem('userInfo_template', JSON.stringify(info));
       this.$router.push('/');
-    },
-    /**
-     * 返回登入
-     */
-    backToLogin() {
-      this.showForget = false;
-      var data = {
-        account: null,
-        password: null
-      };
-      this.getValidateSuccess = false;
-      this.loginAttr = JSON.parse(JSON.stringify(data));
-    },
-    /**
-     * 取得驗證碼
-     */
-    getValidateCode() {
-      this.getValidateSuccess = true;
     }
   }
 }
@@ -161,35 +81,54 @@ export default {
 <style lang="scss" module>
   @import "@/assets/css/custom.scss";
 
-  .loginForm {
-    width: 400px;
-    margin: 0 auto;
-    a {
-      margin-left: 15px;
-      text-decoration: underline;
-      color: red;
-      cursor: pointer;
+  .content {
+    display: flex;
+    align-items: center;
+    @include block-size-setting(calc(100vw - 40px), 100vh, center, unset, unset, -60px 0 0 0);
+    @include background-image-setting(unset, calc(100vw - 40px), calc(100vh + 20px), 0);
+
+    & img {
+      margin-right: calc((100vw - 300px - 306.8px) / 2 * -1);
+      margin-left: calc((100vw - 300px - 306.8px - 100px) / 2);
     }
   }
 
-  .forgetDiv {
-    width: 400px;
-    margin: 0 auto;
-  }
+  .loginForm {
+    @include block-size-setting(300px, 200px, unset, inherit, unset, 0 auto);
+    @extend %form-shared;
+    margin-top: -50px;
 
-  .forgetForm {
     :global {
-      .el-input-group__append {
-        .el-button {
-          background-color: $subtitle-color;
-          color: $white-color;
+      .el-form-item__label {
+        font-size: 24px;
+      }
 
-          & span {
-            color: $white-color;
-            font-size: 14px;
-          }
-        }
+      .el-input__inner, .el-input.is-disabled .el-input__inner {
+        height: 40px;
+        border-radius: 40px;
+        line-height: 80px;
+        font-size: 18px;
+        background-color: $white-color;
+        border-color: $border-color;
+        color: $font-color-7;
+      }
+
+      .el-input .el-input__clear {
+        color: $font-color-7;
       }
     }
+
+    & .btn-A {
+      @include font-setting(24px, bold, unset, unset);
+      width: 280px;
+      margin-left: 20px;
+      border-radius: 23px;
+    }
+  }
+
+  .logo {
+    position: absolute;
+    top: 120px;
+    left: calc((100vw - 411px - 500px) / 2 * -1);
   }
 </style>

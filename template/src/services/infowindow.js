@@ -1,3 +1,15 @@
+let options = {
+  "closeButton": false, // 顯示關閉按鈕
+  "debug": false, // 除錯
+  "newestOnTop": false,  // 最新一筆顯示在最上面
+  "progressBar": true, // 顯示隱藏時間進度條
+  "positionClass": "toast-bottom-center", // 位置的類別
+  "preventDuplicates": false, // 隱藏重覆訊息
+  "onclick": null, // 當點選提示訊息時，則執行此函式
+  "timeOut": "1000", // 當超過此設定時間時，則隱藏提示訊息(單位: 毫秒)
+  "extendedTimeOut": "1000",
+}
+
 export class Info {
 
   /**
@@ -8,7 +20,6 @@ export class Info {
   alert(target, message) {
     target.$alert(message, '', {
       confirmButtonText: '確定',
-      // confirmButtonClass: 'feature-button',
       iconClass: 'el-icon-error',
       callback: action => {},
     })
@@ -33,11 +44,7 @@ export class Info {
    * @param {String} message 訊息
    */
   success(target, message) {
-    target.$toast({
-      text: message,
-      type: 'success',
-      duration: 1000
-    });
+    target.$toastr.success(message, '', options)
   }
 
   /**
@@ -46,11 +53,13 @@ export class Info {
    * @param {String} message 訊息
    */
   error(target, message) {
-    target.$toast({
-      text: message,
-      type: 'danger',
-      duration: 1000
-    });
+    const response = message.response
+    if(response !== undefined && response.status === 403 && response.data !== undefined && response.data.message !== undefined) {
+      target.$toastr.error(response.data.message, '', options)
+    }
+    else if(JSON.parse(JSON.stringify(message)).status !== 401) {
+      target.$toastr.error(message, '', options)
+    }
   }
 
   /**
@@ -59,11 +68,7 @@ export class Info {
    * @param {String} message 訊息
    */
   info(target, message) {
-    target.$toast({
-      text: message,
-      type: 'info',
-      duration: 1000
-    });
+    target.$toastr.info(message, '', options)
   }
 
   /**
@@ -72,10 +77,6 @@ export class Info {
    * @param {String} message 訊息
    */
   warning(target, message) {
-    target.$toast({
-      text: message,
-      type: 'wraning',
-      duration: 1000
-    });
+    target.$toastr.warning(message, '', options)
   }
 }

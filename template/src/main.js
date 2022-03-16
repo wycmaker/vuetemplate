@@ -9,13 +9,15 @@ import locale from 'element-ui/lib/locale'
 import 'element-ui/lib/theme-chalk/index.css'
 import router from './router'
 import { routerProcess } from '@/services/routerProcess.js'
-import toastRegistry from '@/plugins/toastr'
+import VueToastr2 from 'vue-toastr-2'
+import 'vue-toastr-2/dist/vue-toastr-2.min.css'
 import '@/services/browserJudge.js'
-
-Vue.use(toastRegistry);
+window.toastr = require('toastr');
 
 Vue.use(ElementUI)
+Vue.use(VueToastr2)
 locale.use(lang)
+
 
 Vue.config.productionTip = false
 Vue.config.devtools =  (process.env.NODE_ENV === 'dev')

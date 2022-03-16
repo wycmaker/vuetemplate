@@ -31,7 +31,7 @@
       },
       switchText: {
         type: Array,
-        default: [ '啟用', '停用']
+        default: () => { return [ '啟用', '停用'] }
       }
     },
     data() {
@@ -66,23 +66,5 @@
 <style lang="scss" module>
   @import "@/assets/css/custom.scss";
 
-  .switch {
-    :global {
-      .el-switch__label {
-        color: $switch-default;
-
-        &.is-active {
-          color: $switch-active;
-
-          &.el-switch__label--left {
-            color: $switch-unactive;
-          }
-        }
-      }
-
-      .el-switch__label span {
-        font-size: 16px;
-      }
-    }
-  }
+  @include switch-setting($switch-active, $switch-unactive, $switch-default);
 </style>

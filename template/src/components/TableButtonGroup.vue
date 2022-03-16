@@ -1,8 +1,8 @@
 <template>
   <div :class="$style.center">
-    <el-button type="primary" icon="el-icon-edit" :disabled="disable[0]" v-if="show[0]" @click="updateItem(scope.$index)"></el-button>
-    <el-button type="danger" :icon="isDelete ? 'el-icon-delete' : 'el-icon-setting'" :disabled="disable[1]" v-if="show[1]" @click="deleteItem(scope.$index)"></el-button>
-    <el-button type="warning" icon="el-icon-view" :disabled="disable[2]" v-if="show[2]" @click="watchItem(scope.$index)"></el-button>
+    <el-button :class="$style['btn-B']" icon="el-icon-edit" :disabled="disable[0]" v-if="show[0]" @click="updateItem(scope.$index)"></el-button>
+    <el-button :class="$style['btn-B']" icon="el-icon-view" :disabled="disable[1]" v-if="show[1]" @click="watchItem(scope.$index)"></el-button>
+    <el-button :class="(isDelete == true) ? $style['btn-C'] : $style['btn-E']" :icon="(isDelete == true) ? 'el-icon-delete' : 'el-icon-setting'" :disabled="disable[2]" v-if="show[2]" @click="deleteItem(scope.$index)"></el-button>
   </div>
 </template>
 

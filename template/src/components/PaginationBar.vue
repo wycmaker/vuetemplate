@@ -1,14 +1,15 @@
 <template>
   <el-pagination
     :class="$style.page"
-    layout="total, sizes, prev, pager, next, jumper"
+    :layout="(pageCount === 5) ? 'total, prev, pager, next' : 'total, sizes, prev, pager, next, jumper'"
     background
     @size-change="sizeChange"
     @current-change="currentChange"
-    :current-page="currentPage"
+    :current-page="currentPageValue"
     :page-sizes="pageSizes"
-    :page-size="pageSize"
+    :page-size="pageSizeValue"
     :total="total"
+    :pager-count="pageCount"
   >
   </el-pagination>
 </template>
@@ -16,6 +17,14 @@
 <script>
 export default {
   props: {
+    pageSize: {
+      type: Number,
+      dafault: 10
+    },
+    currentPage: {
+      type: Number,
+      dafault: 1
+    },
     pageSizes: {
       type: Array,
       default: () => [10, 20, 30, 40]
@@ -25,22 +34,13 @@ export default {
       default: 0
     },
   },
-  data() {
-    return {
-      pageSize: 10,
-      currentPage: 1,
-    }
-  },
-  mounted() {
-
-  },
   methods: {
     /**
      * 資料數變更函數
      * @param {number} size 每頁資料數
      */
     sizeChange(size) {
-      this.pageSize = size
+      this.pageSizeValue = size
       this.getData(false)
     },
     /**
@@ -48,7 +48,7 @@ export default {
      * @param {number} page 頁數
      */
     currentChange(page) {
-      this.currentPage = page
+      this.currentPageValue = page
       this.getData(true)
     },
     /**
@@ -56,8 +56,33 @@ export default {
      * @param {boolean} isChange 頁面變更函數
      */
     getData(isChange) {
-      let skip = (isChange === true) ? (this.currentPage - 1) * this.pageSize : 0
-      this.$emit('getData', skip)
+      this.$emit('getData', isChange)
+    }
+  },
+  computed: {
+    pageSizeValue: {
+      get() {
+        return this.pageSize
+      },
+      set(newValue) {
+        this.$emit('update:pageSize', newValue)
+      }
+    },
+    currentPageValue: {
+      get() {
+        return this.currentPage
+      },
+      set(newValue) {
+        this.$emit('update:currentPage', newValue)
+      }
+    },
+    pageCount() {
+      var clientWidth = this.$store.state.clientWidth
+      if(clientWidth !== null) {
+        if(clientWidth >= 1440) return 9
+        else if(clientWidth >= 1024 && clientWidth < 1440) return 7
+        else return 5
+      }
     }
   }
 }
@@ -66,48 +91,43 @@ export default {
 <style lang="scss" module>
   @import "@/assets/css/custom.scss";
 
-  // @mixin style-setting($color, $background, $border) {
-  //   color: $color !important;
-  //   background-color: $background !important;
-  //   border: 1px solid $border !important;
-  // }
-
   .page {
     text-align: center;
     margin-top: 15px;
 
-    // :global {
-    //   .el-pagination__total, .el-input__inner, .el-pagination__jump {
-    //     color: $font-color-1;
-    //     font-size: 14px;
-    //   }
+    :global {
+      .el-pagination__total, .el-input__inner, .el-pagination__jump {
+        @include font-setting(14px, unset, $font-color-9);
+      }
+      
+      @include input-setting($font-color-9, $white-color, $button-color-3);
 
-    //   .el-input__inner {
-    //     background-color: $white-color;
-    //     border-color: $border-color-1;
-    //   }
+      .el-select .el-input__inner,
+      .el-select .el-input__inner:focus, 
+      .el-pagination__sizes .el-input .el-input__inner:hover, 
+      .el-pagination__editor.el-input .el-input__inner,
+      .el-pagination__editor.el-input .el-input__inner:hover:focus, 
+      .el-pagination__editor.el-input .el-input__inner:hover:hover {
+        border-color: $button-color-3;
+      }
 
-    //   .el-select .el-input__inner:focus, .el-pagination__sizes .el-input .el-input__inner:hover {
-    //     border-color: $border-color-1;
-    //   }
+      .el-pager li, .btn-prev, .btn-next{
+        @include pager-color-setting($font-color-8, $white-color, $border-color-1);
+      }
 
-    //   .el-pager li, .btn-prev, .btn-next{
-    //     @include style-setting($placeholder-color, $white-color, $border-color-1);
-    //   }
+      .el-pager li.active{
+        @include pager-color-setting($white-color, $button-color-2, $button-color-2);
+      }
 
-    //   .el-pager li.active{
-    //     @include style-setting($white-color, $background-color-6, $background-color-6);
-    //   }
+      .el-input--mini .el-input__inner {
+        height: 28px;
+        line-height: 28px;
+      }
 
-    //   .el-input--mini .el-input__inner {
-    //     height: 28px;
-    //     line-height: 28px;
-    //   }
-
-    //   .el-pagination__jump .el-input__inner {
-    //     padding: 0 3px;
-    //   }
-    // }
+      .el-pagination__jump .el-input__inner {
+        padding: 0 3px;
+      }
+    }
   }
 
 </style>

@@ -7,7 +7,7 @@ var iv_128 = pbkdf2.pbkdf2Sync('b8-8f1f-b02aee17', 'salt', 1, 128/8, 'sha512');
 export class UserManager {
 
   constructor() {
-    this.name = "user.i"
+    this.name = "user.template"
     this.key = new Uint8Array(key_256)
     this.iv = new Uint8Array(iv_128)
     this.segmentSize = 1

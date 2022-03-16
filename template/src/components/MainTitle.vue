@@ -1,6 +1,6 @@
 <template>
   <div :class="[$style.block, (needBack === false) ? $style['title-normal'] : $style['title-back']]">
-    <el-button v-if="needBack" @click="goBack" :class="[$style.btn, $style['btn-C']]">
+    <el-button v-if="needBack" @click="goBack" :class="[$style.btn]">
       <i class="el-icon-back"></i>
     </el-button>
     <h1 :class="$style.title">{{title}}</h1>
@@ -39,21 +39,13 @@ export default {
   }
 
   .btn {
+    @include button-color-setting($white-color, $subtitle-color, $subtitle-color, $white-color, $subtitle-color, $subtitle-color, $hover-color-2);
     border-radius: 20px;
     padding: 12px;
-    color: $white-color;
-    background-color: $subtitle-color;
-
-    &:hover, &:focus {
-      color: $white-color;
-      background-color: $subtitle-color;
-    }
   }
 
   .title {
-    font-size: 22px;
-    line-height: 36px;
-    color: $subtitle-color;
+    @include font-setting(22px, unset, $subtitle-color, 36px);
 
     &-normal {
       margin-bottom: 0px;

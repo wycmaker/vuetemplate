@@ -5,8 +5,8 @@
       </div>
       <div v-if="$store.state.userInfo !== null">
         <div style="display:inline-block;">
-          <span>Hi,{{ this.$store.state.userInfo.userName }}</span>
-          <div style="display:inline-block;cursor: pointer;margin-left:20px" @click="logout">
+          <span :class="$style['header-user']">Hi,{{ this.$store.state.userInfo.userName }}</span>
+          <div :class="$style['header-logout']" @click="logout">
             <span>登出</span>
           </div>
         </div>
@@ -40,7 +40,7 @@ export default {
         } else if(res.data.isSuccess) {
           this.$store.commit('clearUserInfo')
           this.$router.push('/Login')
-        } else infowindow.error(res.data.expectionMessage)
+        } else infowindow.error(this, res.data.expectionMessage)
       }).catch(err => {
         infowindow.error(this, err)
       })
@@ -51,14 +51,45 @@ export default {
 
 <style lang="scss" module>
   @import "@/assets/css/custom.scss";
+
   .background {
-    background-color: $sidemenu-background;
     display:flex;
-    height: 60px;
     align-items:center;
     justify-content: space-between;
-    font-weight: bold;
-    color: $white-color;
-    padding: 0 15px;
+    @include block-size-setting(unset, 60px, unset, unset, 0 15px, unset);
+    @include font-setting(18px, bold, $white-color);
   }
+
+  .header {
+    &-user {
+      @include font-setting(unset, bold, $font-color-3);
+      position: relative;
+      right: 50px;
+    }
+
+    &-logout {
+      display:inline-block;
+      cursor: pointer;
+      margin-left:5px;
+      @include font-setting(unset, 700, $font-color-4);
+      img:nth-of-type(2):hover {
+        opacity: 0;
+      }
+    }
+
+    &-icon {
+      position: absolute;
+      height: 25px;
+      top: 17px;
+      right: 55px;
+    }
+
+    &-logo {
+      position: relative;
+      height: 45px;
+      top: 2px;
+    }
+  }
+
+
 </style>
