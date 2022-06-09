@@ -11,15 +11,14 @@
     "build--demo": "cross-env ENV_CONFIG=demo node build/build.js"
   },
   "dependencies": {
-    "aes-js": "^3.1.2",
     "axios": "^0.21.1",
     "babel-polyfill": "^6.26.0",
+    "crypto-js": "^4.1.1",
     "element-ui": "^2.15.6",
     "js-cookie": "^3.0.1",
     "jschardet": "^3.0.0",
     "node-sass": "^4.14.1",
     "papaparse": "^5.3.1",
-    "pbkdf2": "^3.1.2",
     "toastr": "^2.1.4",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1",

@@ -12,16 +12,13 @@
         <el-input v-model="loginAttr.password" show-password></el-input>
       </el-form-item>
       <el-form-item label="" label-width="0px" style="text-align: center;margin-top: 30px">
-        <el-button :class="$style['btn-A']" @click="login" :disabled="loading">登　入</el-button>
+        <el-button :class="$style['btn-A']" @click="login" id="loading">登　入</el-button>
       </el-form-item>
     </el-form>
   </div>
 </template>
 
 <script>
-import { Info, ApiService } from '@/services'
-const infowindow = new Info()
-const apiService = new ApiService()
 
 export default {
   data() {
@@ -34,32 +31,32 @@ export default {
     }
   },
   mounted() {
-
   },
   methods: {
     /**
      * 登入
      */
-    login() {
-      var accountValidate = (this.loginAttr.account === null || this.loginAttr.account.trim() === '')
-      var passwordValidate = (this.loginAttr.password === null || this.loginAttr.password.trim() === '')
+    async login() {
+      const accountValidate = (this.loginAttr.account === null || this.loginAttr.account.trim() === '')
+      const passwordValidate = (this.loginAttr.password === null || this.loginAttr.password.trim() === '')
 
-      if(accountValidate && passwordValidate) infowindow.alert(this, '請輸入帳號與密碼')
-      else if(accountValidate) infowindow.alert(this, '請輸入帳號')
-      else if(passwordValidate) infowindow.alert(this, '請輸入密碼')
+      if(accountValidate && passwordValidate) this.$service.info.alert(this, '請輸入帳號與密碼')
+      else if(accountValidate) this.$service.info.alert(this, '請輸入帳號')
+      else if(passwordValidate) this.$service.info.alert(this, '請輸入密碼')
       else {
-        // 進行登入處理
-        this.loading = true
-        apiService.postData('/api/Account/Login', this.loginAttr).then(res => {
-          if(res.data.item1.isSuccess) {
-            this.storeUserInfo(res.data.item2)
-            infowindow.success(this, res.data.item1.successMessage)
-          } else infowindow.error(this, res.data.item1.exceptionMessage)
-        }).catch(err => {
-          infowindow.error(this, err)
-        }).finally(_ => {
-          this.loading = false
-        })
+        try{
+          const res = await this.$api.login(this.loginAttr)
+          if(res) {
+            const { data } = res
+            if(data.item1.isSuccess) {
+              this.storeUserInfo(data.item2)
+              this.$service.info.success(this, data.item1.successMessage)
+            }
+            else this.$service.info.error(this, data.item1.exceptionMessage)
+          }
+        } catch(error) {
+          this.$service.info.error(this, error)
+        }
       }
     },
     /**
@@ -67,12 +64,11 @@ export default {
      * @param {Object} data 使用者資訊
      */
     storeUserInfo(data) {
-      var info = JSON.parse(JSON.stringify(data))
+      let info = JSON.parse(JSON.stringify(data))
       delete info.token
       delete info.expiryDateTime
-      this.$store.commit('setUserInfo', data);
-      localStorage.setItem('userInfo_template', JSON.stringify(info));
-      this.$router.push('/');
+      this.$store.commit('setUserInfo', data)
+      this.$router.push('/')
     }
   }
 }

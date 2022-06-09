@@ -16,9 +16,6 @@
 </template>
 
 <script>
-import { ApiService, Info } from '@/services'
-const apiService = new ApiService()
-const infowindow = new Info()
 
 export default {
   data() {
@@ -33,17 +30,20 @@ export default {
     /**
      * 登出
      */
-    logout() {
-      apiService.getData('/api/Account/Logout', {}).then(res => {
-        if(res.status === 401) {
-          this.$router.push('Login');
-        } else if(res.data.isSuccess) {
-          this.$store.commit('clearUserInfo')
-          this.$router.push('/Login')
-        } else infowindow.error(this, res.data.expectionMessage)
-      }).catch(err => {
-        infowindow.error(this, err)
-      })
+    async logout() {
+      try {
+        const res = await this.$api.logout()
+        if(res) {
+          const { data } = res
+          if(data.isSuccess) {
+            this.$store.commit('clearUserInfo')
+            this.$router.push('/login')
+          } else this.$service.info.error(this, data.exceptionMessage)
+        }
+      }
+      catch(err) {
+        this.$service.info.error(this, err)
+      }
     }
   }
 }

@@ -41,7 +41,7 @@ export default {
      */
     sizeChange(size) {
       this.pageSizeValue = size
-      this.getData(false)
+      this.$emit('changeSize', size)
     },
     /**
      * 頁面變更函數
@@ -49,15 +49,8 @@ export default {
      */
     currentChange(page) {
       this.currentPageValue = page
-      this.getData(true)
+      this.$emit('changeCurrent', page)
     },
-    /**
-     * 取得資料
-     * @param {boolean} isChange 頁面變更函數
-     */
-    getData(isChange) {
-      this.$emit('getData', isChange)
-    }
   },
   computed: {
     pageSizeValue: {
@@ -77,7 +70,7 @@ export default {
       }
     },
     pageCount() {
-      var clientWidth = this.$store.state.clientWidth
+      let clientWidth = this.$store.state.clientWidth
       if(clientWidth !== null) {
         if(clientWidth >= 1440) return 9
         else if(clientWidth >= 1024 && clientWidth < 1440) return 7

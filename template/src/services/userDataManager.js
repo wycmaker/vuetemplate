@@ -1,88 +1,85 @@
-var aesjs = require('aes-js');
-var pbkdf2 = require('pbkdf2')
+const CryptoJS = require("crypto-js")
 
-var key_256 = pbkdf2.pbkdf2Sync('22ca3746-6ed3-41', 'salt', 1, 256 / 8, 'sha512');
-var iv_128 = pbkdf2.pbkdf2Sync('b8-8f1f-b02aee17', 'salt', 1, 128/8, 'sha512');
+const name = 'user.template'
+const key = CryptoJS.SHA256(CryptoJS.enc.Utf8.parse('QEDF$%@_($KLS'))
+const iv = CryptoJS.MD5(CryptoJS.enc.Utf8.parse('Q#%@KD*5)7'))
 
-export class UserManager {
+/* #region export function */
 
-  constructor() {
-    this.name = "user.template"
-    this.key = new Uint8Array(key_256)
-    this.iv = new Uint8Array(iv_128)
-    this.segmentSize = 1
-  }
-
- /**
-  * 儲存使用者資料
-  * @param {Object} data 使用者資料
-  */
-  setUserData(data) {
-    // Encrypt
-    const ciphertext = this.encrypt(JSON.stringify(data), this.key, this.iv);
-
-    if (localStorage.getItem(this.name) !== ciphertext) {
-      localStorage.setItem(this.name, ciphertext);
-    }
-  }
-  
-  /**
-   * 取得使用者資料
-   * @returns {Object} 使用者資料
-   */
-  getUserData() {
-    const ciphertext = localStorage.getItem(this.name);
-    
-    if (ciphertext) {
-      try {
-        const decryptedStr = this.decrypt(ciphertext, this.key, this.iv);
-        const data = JSON.parse(decryptedStr);
-        return data
-      } catch (error) {
-        return null
-      }
-    }
-    
-    return null
-  }
-
-
- /**
-  * 清除登入使用者資料
-  */
-  clearData() {
-    localStorage.clear()
-  }
-
-
-  /**
-   * 加密
-   * @param {String} data 來源
-   * @param {String} key key
-   * @param {String} iv iv值
-   * @returns {String}
-   */
-  encrypt(data, key, iv) { 
-    var textBytes = aesjs.utils.utf8.toBytes(data);
-    var aesCfb = new aesjs.ModeOfOperation.cfb(key, iv, this.segmentSize);
-    var encryptedBytes = aesCfb.encrypt(textBytes);
-    var encryptedHex = aesjs.utils.hex.fromBytes(encryptedBytes);
-    return encryptedHex;
-  }
-
-
-  /**
-   * 解密
-   * @param {String} encrypted 加密字串
-   * @param {Strgin} key key值
-   * @param {Strgin} iv iv值
-   * @returns {String}
-   */
-  decrypt(encrypted, key, iv) { 
-    var encryptedBytes = aesjs.utils.hex.toBytes(encrypted);
-    var aesCfb = new aesjs.ModeOfOperation.cfb(key, iv, this.segmentSize);
-    var decryptedBytes = aesCfb.decrypt(encryptedBytes);
-    var decryptedText = aesjs.utils.utf8.fromBytes(decryptedBytes);
-    return decryptedText;
-  }
+/**
+ * 將加密後的使用者資訊存至localstorage
+ * @param {Object} data 
+ */
+const setUserData = (data) => {
+  const ciphertext = encrypt(JSON.stringify(data));
+  if (localStorage.getItem(name) !== ciphertext) localStorage.setItem(name, ciphertext)
 }
+
+/**
+ * 取得使用者資料
+ * @returns {Object} 使用者資訊
+ */
+const getUserData = () => {
+  const ciphertext = localStorage.getItem(name);
+
+  if (ciphertext) {
+    try {
+      const decryptedStr = decrypt(ciphertext);
+      const data = JSON.parse(decryptedStr);
+      return data
+    } catch (error) {
+      return null
+    }
+  }
+
+  return null
+}
+
+/**
+ * 從localstorage清除使用者資訊
+ */
+const clearData = () => {
+  localStorage.clear()
+}
+
+export const manager = {
+  setUserData: setUserData,
+  getUserData: getUserData,
+  clearData: clearData
+}
+
+/* #endregion */
+
+
+/* #region 私有函數 */
+
+/**
+ * 加密
+ * @param {String} data 來源
+ * @returns {String} 加密後的字串
+ */
+const encrypt = (data) => {
+  const encrypted = CryptoJS.AES.encrypt(data, key, {
+    iv: iv,
+    mode: CryptoJS.mode.CBC,
+    padding: CryptoJS.pad.Pkcs7
+  });
+  return encrypted.toString();
+}
+
+
+/**
+ * 解密
+ * @param {String} encrypted 加密字串
+ * @returns {String} 揭密後的字串
+ */
+const decrypt = (encrypted) => {
+  const decrypted = CryptoJS.AES.decrypt(encrypted, key, {
+    iv: iv,
+    mode: CryptoJS.mode.CBC,
+    padding: CryptoJS.pad.Pkcs7
+  });
+  return decrypted.toString(CryptoJS.enc.Utf8);
+}
+
+/* #endregion */

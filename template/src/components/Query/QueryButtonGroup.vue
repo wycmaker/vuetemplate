@@ -12,7 +12,7 @@ export default {
     show: {
       type: Array,
       default: () => {
-        return [true, true, true]
+        return [true, true, false]
       }
     }
   },

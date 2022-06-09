@@ -1,136 +1,126 @@
 import store from '../store'
 import router from '../router'
 import Cookies from 'js-cookie'
-import { UserManager } from '@/services/userDataManager';
+import { manager } from '@/services/userDataManager';
 
-// 登入處理
-var manager = new UserManager();
+/* #region 頁面路由處理 */
 
-export function routerProcess() {
-  // 處理登入路由
-  // 重新整理的話，sessionStorage還存在；分頁全部關閉後，sessionStorage會被刪除
-  const alreadyExist = sessionStorage.getItem('alreadyExist');
-  // 記錄開啟的分頁數量
-  var count = parseInt(Cookies.get('pages'));
+export const routerProcess = () => {
+  // 分頁處理
+  pageProcess()
 
-  // 完全關閉瀏覽器或關閉所有分頁時，都需清空localStorage的內容
-  if(count < 1 && !alreadyExist || isNaN(count) && !alreadyExist) localStorage.clear();
-
-  // 計算分頁數量
-  if(isNaN(count)) Cookies.set('pages', 1, {samesite: 'lax'});
-  else Cookies.set('pages', count+1, {samesite: 'lax'});
-
-  // 重新整理狀態賦值
-  if(!alreadyExist) sessionStorage.setItem('alreadyExist', '1');
-
-  // 關閉分頁，分頁數量減1
-  window.onunload = () => {
-    var count = Cookies.get('pages');
-    Cookies.set('pages', parseInt(count) - 1, {samesite: 'lax'});
-  }
-
+  // 設定使用者資訊
   setStore()
 
-  window.addEventListener("storage", function (e) {
-    var userInfo = localStorage.getItem('userInfo_template')
-    if(userInfo === null) {
-      var currentPath = this.window.location.hash.toLowerCase()
-      if(currentPath !== '#/login') router.push('/login')
-    } else {
-      setStore()
-      router.push('/').catch(()=>{})
-    }
+  // localhostStorage 的監聽事件
+  storageChange()
+
+  // 路由跳轉處理
+  pathProcess()
+}
+
+/**
+ * 分頁處理
+ */
+const pageProcess = () => {
+  // 判斷是否有其他分頁存在
+  const alreadyExist = sessionStorage.getItem('alreadyExist')
+  const count = parseInt(Cookies.get('pages'))
+
+  if ((count < 1 || isNaN(count)) && !alreadyExist) manager.clearData()
+
+  // 重新整理後，如alreadyExist不存在 => 設定alreadyExist的值
+  if (!alreadyExist) sessionStorage.setItem('alreadyExist', '1')
+
+  // 設定當前分頁數目
+  let setCount = isNaN(count) ? 1 : count + 1
+  Cookies.set('pages', setCount, {
+    sameSite: 'lax'
   })
 
-  let setRoute = false
-
-  /* 判斷是否有登入 */
-  router.beforeEach((to, from, next) => {
-    var userInfo = JSON.parse(localStorage.getItem('userInfo_template'))
-    var path = to.path.toUpperCase()
-    if(userInfo === null) {
-      // 未登入
-      if(path === '/LOGIN') next()
-      else next({path: '/login'})
-      setRoute = false
-    } else {
-      // 已登入
-
-      if(path === '/LOGIN') {
-        next({path: '/'})
-      } 
-      else {
-        var index = router.routes.findIndex(r => r.path.toLowerCase() === to.path)
-        if(index === -1) next({ path: '/' })
-        else next()
-      }
-
-      // 依權限更新路由
-      if(!setRoute) {
-        // let targetRoute = []
-
-        // if(userInfo !== null && userInfo.accountType !== 1) {
-        //   let authority = userInfo.authority.split(',')
-        //   let index = -1
-        //   if(!authority.includes('1') && !authority.includes('2') && !authority.includes('3')) {
-        //     index = routes.findIndex(r => r.path === '/ReportManage')
-        //     targetRoute.push(routes[index])
-        //   } 
-        //   if(!authority.includes('4')) {
-        //     index =  routes.findIndex(r => r.path === '/DoctorOrderFormula')
-        //     targetRoute.push(routes[index])
-        //   } 
-        //   if(!authority.includes('5') && !authority.includes('6')) { 
-        //     index = routes.findIndex(r => r.path === '/ImportQuery')
-        //     targetRoute.push(routes[index])
-        //   }
-        //   if(!authority.includes('7')) {
-        //     index = routes.findIndex(r => r.path === '/QuestionnaireList')
-        //     targetRoute.push(routes[index])
-        //   }
-        //   if(!authority.includes('8')) {
-        //     index = routes.findIndex(r => r.path === '/ChartExport')
-        //     targetRoute.push(routes[index])
-        //   }
-        //   if(!authority.includes('9')) {
-        //     index = routes.findIndex(r => r.path === '/UserManage')
-        //     targetRoute.push(routes[index])
-        //   }
-        //   if(!authority.includes('10')) {
-        //     index = routes.findIndex(r => r.path === '/GroupManage')
-        //     targetRoute.push(routes[index])
-        //   }
-        //   if(!authority.includes('12')) {
-        //     index = routes.findIndex(r => r.path === '/TemplateManage')
-        //     targetRoute.push(routes[index])
-        //   }
-        // }
-
-        // // 移除沒有權限的頁面
-        // targetRoute.forEach(item => {
-        //   router.removeRoute(item)
-        // })
-
-        setRoute = true
-      }
-    }
-  })
+  // 關閉分頁處理
+  window.onunload = () => {
+    let count = Cookies.get('pages')
+    Cookies.set('pages', parseInt(count) - 1, {
+      sameSite: 'lax'
+    })
+  }
 }
 
 /**
  * 設定使用者資訊
  */
-function setStore() {
+const setStore = () => {
   const data = manager.getUserData()
 
+  /**
+   * 取得使用者資訊
+   * 1. 可以取得 => 判斷token是否過期作相對應的動作
+   * 2. 無法取得 => 清空localstorage，並將使用者導向登入頁
+   */
   if (data) {
-    store.commit('setUserInfo', data)
-
+    /**
+     * 可以取得使用者資訊
+     * 1. token未過期 => 將使用者資訊記錄到Vuex中
+     * 2. token過期 => 清空localstorage，並將使用者導向登入頁
+     */
     const expiryDate = new Date(data.expiryDate)
     const now = new Date()
-
     if (now < expiryDate && data.token) {
+      store.commit('setUserInfo', data)
       store.commit('authenticate')
     }
-  }
+    else clearUserData()
+  } else clearUserData()
 }
+
+/**
+ * 清空使用者資訊，並導向登入頁
+ */
+const clearUserData = () => {
+  router.push('/login')
+  manager.clearData()
+}
+
+/**
+ * localStorage變更事件
+ */
+const storageChange = () => {
+  window.addEventListener("storage", (e) => {
+    setStore()
+  })
+}
+
+/**
+ * 實際路由跳轉規則
+ */
+const pathProcess = () => {
+  router.beforeEach((to, from, next) => {
+    // 取得使用者資訊
+    const data = manager.getUserData()
+
+    // 取得欲前往的頁面
+    const path = to.path.toUpperCase()
+
+    /**
+     * 1. 已登入，前往登入頁面 => 自動導向首頁
+     * 2. 已登入，不是前往登入頁 => 前往目標頁面
+     * 3. 未登入，前往登入頁面 => 前往目標頁面(登入頁)
+     * 4. 未登入，不是前往登入頁 => 自動導向登入頁
+     */
+    if (data && path === '/LOGIN') next({ path: '/' })
+    else if (data && path !== '/LOGIN') next()
+    else if (!data && path === '/LOGIN') next()
+    else next({ path: '/login' })
+  })
+}
+
+/* #endregion */
+
+/* #region 依權限設定路由 */
+
+export const setRoute = (authorityLList) => {
+  // 依權限塞入路由
+}
+
+/* #endregion */

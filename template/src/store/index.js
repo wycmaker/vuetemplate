@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import { UserManager } from '@/services/userDataManager';
+import { manager  } from '@/services/userDataManager';
 
 Vue.use(Vuex);
 
@@ -33,8 +33,6 @@ export default new Vuex.Store({
       state.userInfo = Object.assign({}, info);
       state.token = info.token;
       state.expiryDate = info.expiryDate;
-      
-      const manager = new UserManager();
       manager.setUserData(info);
     },
     /**
@@ -53,8 +51,6 @@ export default new Vuex.Store({
       state.expiryDate = null;
       state.isAuthenticated = false;
       state.userInfo = null;
-
-      const manager = new UserManager();
       manager.clearData();
     },
     /**

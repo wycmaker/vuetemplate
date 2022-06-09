@@ -23,18 +23,19 @@
 </template>
 
 <script>
-import { Common } from '@/services'
 
-const common = new Common()
 export default {
   props: {
     startDate: {
+      type: String,
       default: null
     },
     endDate: {
+      type: String,
       default: null
     },
     title: {
+      type: String,
       default: null
     }
   },
@@ -55,10 +56,10 @@ export default {
     startChange(val) {
       if(val !== null) {
         if(this.endDateValue === null) {
-          this.endDateValue = common.getDateString(new Date(val))
+          this.endDateValue = new Date(val).toString('/')
         }
         else if(this.endDateValue !== null && new Date(val).getTime() > new Date(this.endDateValue).getTime()) {
-          this.endDateValue = common.getDateString(new Date(val))
+          this.endDateValue = new Date(val).toString('/')
         }
       } else this.endDateValue = null
     },
@@ -66,7 +67,7 @@ export default {
      * 結束日期改變
      */
     endChange(val) {
-      if(val !== null && this.startDateValue === null) this.startDateValue = common.getDateString(new Date(val))
+      if(val !== null && this.startDateValue === null) this.startDateValue = new Date(val).toString('/')
     }
   },
   computed: {

@@ -146,12 +146,12 @@ export default {
   mounted() {
     this.$nextTick(() => {
       /* 多層Menu結構使用 */
-      var pathName = location.hash.toLowerCase().getPath()
-      this.menuList.forEach(item => {
-        item.subList.forEach(url => {
-          if(url.path === pathName) this.oldFold = item.name
-        })
-      })
+      // var pathName = location.hash.toLowerCase().getPath()
+      // this.menuList.forEach(item => {
+      //   item.subList.forEach(url => {
+      //     if(url.path === pathName) this.oldFold = item.name
+      //   })
+      // })
     })
   },
   methods: {
@@ -166,7 +166,7 @@ export default {
      * 轉跳頁面
      */
     changePage(pagePath) {
-      var path = location.hash.toLowerCase().getPath()
+      let path = location.hash.toLowerCase().getPath()
       if(path === pagePath) {
         this.reloadPage()
       } else {
@@ -191,7 +191,7 @@ export default {
   computed: {
 		nowActive() {
       this.currentPath = this.$route.path;
-      var path;
+      let path;
       if(this.currentPath === '/') path = '';
       else path = this.currentPath.substr(1, this.currentPath.length-1).toLowerCase();
       return path;

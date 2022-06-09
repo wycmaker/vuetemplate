@@ -1,6 +1,9 @@
-import { Info } from '@/services/infowindow'
-import { Validate } from '@/services/validate'
-import { ApiService } from '@/services/apiService'
-import { Common } from '@/services/commonMethod'
+import { infowindow } from '@/services/infowindow'
+import * as validator from '@/services/validate'
+import * as common from '@/services/commonMethod'
 
-export { ApiService, Info, Validate, Common }
+export const services = {
+  common: common,
+  validator: validator,
+  info: infowindow
+}

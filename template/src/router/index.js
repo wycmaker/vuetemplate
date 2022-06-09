@@ -1,5 +1,4 @@
 import Vue from 'vue'
-import Router from 'vue-router'
 import VueRouter from 'vue-router'
 
 /* Layout */
@@ -12,7 +11,7 @@ import Index from '@/pages/Index'
 
 
 /* 基礎路由 */
-let baseRoutes = [
+const baseRoutes = [
   {
     path: '/Login',
     component: Login
@@ -39,7 +38,7 @@ let baseRoutes = [
   }
 ]
 
-class VueRouterEx extends VueRouter {
+class Router extends VueRouter {
   constructor(options) {
     super(options)
     const { addRoute } = this.matcher
@@ -58,24 +57,24 @@ class VueRouterEx extends VueRouter {
   }
 }
 
-Vue.use(VueRouterEx)
+Vue.use(Router)
 
 // 解決路由導航報錯
-const originalPush = Router.prototype.push
-const originalReplace = Router.prototype.replace
+const originalPush = VueRouter.prototype.push
+const originalReplace = VueRouter.prototype.replace
 // push
-Router.prototype.push = function push (location, onResolve, onReject) {
+VueRouter.prototype.push = function push (location, onResolve, onReject) {
   if (onResolve || onReject) return originalPush.call(this, location, onResolve, onReject)
   return originalPush.call(this, location).catch(err => err)
 }
 // replace
-Router.prototype.replace = function push (location, onResolve, onReject) {
+VueRouter.prototype.replace = function push (location, onResolve, onReject) {
   if (onResolve || onReject) return originalReplace.call(this, location, onResolve, onReject)
   return originalReplace.call(this, location).catch(err => err)
 }
 
 
-export default new VueRouterEx({
+export default new Router({
   mode: 'hash',
   routes: baseRoutes,
 })
