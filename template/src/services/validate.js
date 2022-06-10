@@ -77,9 +77,26 @@ const arrayValidator = (rule, value, callback, message) => {
   else callback(`${message}不可有空值`)
 }
 
+/**
+ * 登入驗證
+ * @param {String} account 帳號
+ * @param {String} password 密碼
+ * @returns 
+ */
+const loginValidator = (account, password) => {
+  const isAccount = typeof(account) === 'string' && account.length > 0
+  const isPassword = typeof(password) === 'string' && password.length > 0
+
+  if(!isAccount && !isPassword) return '請輸入帳號與密碼'
+  else if(!isAccount && isPassword) return '請輸入帳號'
+  else if(isAccount && !isPassword) return '請輸入密碼'
+  else return 'success'
+}
+
 export const validator = {
   password: passwordValidator,
   confirm: confirmValidator,
   reqularExperssion: rexValidator,
-  notEmptyArray: arrayValidator
+  notEmptyArray: arrayValidator,
+  login: loginValidator
 }

@@ -37,14 +37,10 @@ export default {
      * 登入
      */
     async login() {
-      const accountValidate = (this.loginAttr.account === null || this.loginAttr.account.trim() === '')
-      const passwordValidate = (this.loginAttr.password === null || this.loginAttr.password.trim() === '')
-
-      if(accountValidate && passwordValidate) this.$service.info.alert(this, '請輸入帳號與密碼')
-      else if(accountValidate) this.$service.info.alert(this, '請輸入帳號')
-      else if(passwordValidate) this.$service.info.alert(this, '請輸入密碼')
+      const message = this.$service.validator.login(this.loginAttr.account, this.loginAttr.password)
+      if(message !== 'success') this.$service.info.confirm(this, message)
       else {
-        try{
+        try {
           const res = await this.$api.login(this.loginAttr)
           if(res) {
             const { data } = res
@@ -64,13 +60,10 @@ export default {
      * @param {Object} data 使用者資訊
      */
     storeUserInfo(data) {
-      let info = JSON.parse(JSON.stringify(data))
-      delete info.token
-      delete info.expiryDateTime
       this.$store.commit('setUserInfo', data)
       this.$router.push('/')
     }
-  }
+  },
 }
 </script>
 
