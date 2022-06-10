@@ -38,7 +38,7 @@ export default {
      */
     async login() {
       const message = this.$service.validator.login(this.loginAttr.account, this.loginAttr.password)
-      if(message !== 'success') this.$service.info.confirm(this, message)
+      if(message !== 'success') this.$service.info.alert(this, message)
       else {
         try {
           const res = await this.$api.login(this.loginAttr)

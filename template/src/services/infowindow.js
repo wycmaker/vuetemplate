@@ -75,14 +75,7 @@ const warning = (target, message) => {
   target.$toastr.warning(message, '', options)
 }
 
-export const infowindow = {
-  alert: alert,
-  confirm: confirm,
-  success: success,
-  error: error,
-  info: info,
-  warning: warning
-}
+export const infowindow = { alert, confirm, success, error, info, warning }
 
 /* #endregion */
 
