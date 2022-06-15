@@ -1,5 +1,6 @@
 import axios from 'axios'
 import store from '@/store'
+import router from '@/router'
 import { toast } from '@/main'
 import { httpError } from '@/services/infowindow'
 import { Loading } from 'element-ui'
@@ -73,6 +74,10 @@ instance.interceptors.response.use(response => {
 
     message = (status === 401 || status === 504) ? message : `${message}\nAPI：${url}`
     handleError(message)
+    if(status === 401) {
+      store.commit('clearUserInfo')
+      router.push('/login')
+    }
   } else return Promise.reject(error)
 });
 
