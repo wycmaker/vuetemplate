@@ -112,7 +112,7 @@ const config = {
   }
 }
 
-export default function (method, url, data, isFormData = false) {
+export default function (method, url, data = null, isFormData = false) {
   switch (method) {
     case 'get':
       return instance.get(url, {

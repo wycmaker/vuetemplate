@@ -29,8 +29,8 @@ const passwordValidator = (rule, value, callback, isRequired, message) => {
  * @param {String} newPassword 對比的數值
  */
 const confirmValidator = (rule, value, callback, newPassword) => {
-  if(value !== null && value !== undefined && value.trim() !== '' && value !== newPassword) callback('兩次密碼輸入不一致');
-  else callback();
+  if(value !== null && value !== undefined && value.trim() !== '' && value !== newPassword) callback('兩次密碼輸入不一致')
+  else callback()
 }
 
 /**
@@ -40,23 +40,23 @@ const confirmValidator = (rule, value, callback, newPassword) => {
  * @param {Function} callback 驗證的callback function
  */
 const rexValidator = (rule, value, callback) => {
-  const reg = pattern[this];
-  const match = reg.test(value);
-  if(match || value == null) callback();
+  const reg = pattern[this]
+  const match = reg.test(value)
+  if(match || value == null) callback()
   else {
     switch(this) {
       case 'notChinese': 
-        callback('不可輸入中文');
+        callback('不可輸入中文')
       case 'cellphone':
-        callback('手機號碼格式錯誤');
+        callback('手機號碼格式錯誤')
       case 'email':
-        callback('E-mail格式錯誤');
+        callback('E-mail格式錯誤')
       case 'numberOnly':
-        callback('整數或小數格式輸入錯誤');
+        callback('整數或小數格式輸入錯誤')
       case 'intOnly':
-        callback('僅能輸入正整數');
+        callback('僅能輸入正整數')
       default:
-        callback('輸入格式錯誤');
+        callback('輸入格式錯誤')
     }
   }
 }

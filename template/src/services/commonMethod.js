@@ -46,4 +46,8 @@ Date.prototype.toString = function (delimiters) {
   return year + delimiters + month.toString().padStart(2, '0') + delimiters + day.toString().padStart(2, '0')
 }
 
+Array.prototype.Sum = function() {
+  return this.reduce((a, b) => { return a + b })
+}
+
 /* #endregion */
