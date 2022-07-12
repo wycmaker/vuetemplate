@@ -190,11 +190,11 @@ export default {
   },
   computed: {
 		nowActive() {
-      this.currentPath = this.$route.path;
-      let path;
-      if(this.currentPath === '/') path = '';
-      else path = this.currentPath.substr(1, this.currentPath.length-1).toLowerCase();
-      return path;
+      this.currentPath = this.$route.path
+      let path
+      if(this.currentPath === '/') path = ''
+      else path = this.currentPath.substr(1, this.currentPath.length-1).toLowerCase()
+      return path
 		}
   }
 }

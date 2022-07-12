@@ -9,15 +9,12 @@ import locale from 'element-ui/lib/locale'
 import 'element-ui/lib/theme-chalk/index.css'
 import router from './router'
 import { routerProcess} from '@/services/routerProcess.js'
-import VueToastr2 from 'vue-toastr-2'
-import 'vue-toastr-2/dist/vue-toastr-2.min.css'
 import '@/services/browserJudge.js'
 import { apis} from '@/apiservices'
-import { services} from '@/services'
-window.toastr = require('toastr');
+import { services } from '@/services'
+import '@/services/toastr'
 
 Vue.use(ElementUI)
-Vue.use(VueToastr2)
 locale.use(lang)
 
 Vue.config.productionTip = false
@@ -31,7 +28,7 @@ Vue.prototype.$service = services
 /* #endregion */
 
 // 登入判斷與路由
-routerProcess();
+routerProcess()
 
 /* eslint-disable no-new */
 new Vue({
@@ -43,5 +40,3 @@ new Vue({
   },
   render: h => h(App)
 })
-
-export const toast = Vue.prototype.$toastr

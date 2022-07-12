@@ -21,7 +21,7 @@ export default {
   },
   methods: {
     goBack() {
-      this.$emit('back');
+      this.$emit('back')
     }
   }
 }

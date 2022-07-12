@@ -106,16 +106,16 @@ export default {
      * @param {Number} val 變更的數值
      */
     currentChange(val) {
-      this.currentPage = val;
-      this.getReportList(true);
+      this.currentPage = val
+      this.getReportList(true)
     },
     /**
      * 資料數變更函數
      * @param {Number} val 變更的數值
      */
     sizeChange(val) {
-      this.pageSize = val;
-      this.getReportList(false);
+      this.pageSize = val
+      this.getReportList(false)
     },
   },
 }

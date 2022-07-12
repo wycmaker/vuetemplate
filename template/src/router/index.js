@@ -48,7 +48,7 @@ class Router extends VueRouter {
     this.matcher.addRoute = (newRoute) => {
       this.routes.push(newRoute)
       addRoute(newRoute)
-    };
+    }
   }
 
   removeRoute(route) {

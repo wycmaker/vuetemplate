@@ -5,7 +5,7 @@
 const path = require('path')
 const env = require('./configmap')
 
-let dist = env.DIST_PATH.replace(/"/g, '');
+let dist = env.DIST_PATH.replace(/"/g, '')
 let publicPath = env.PUBLISH_PATH.replace(/"/g, '')
 
 module.exports = {

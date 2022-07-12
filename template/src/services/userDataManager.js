@@ -11,7 +11,7 @@ const iv = CryptoJS.MD5(CryptoJS.enc.Utf8.parse('Q#%@KD*5)7'))
  * @param {Object} data 
  */
 const setUserData = (data) => {
-  const ciphertext = encrypt(JSON.stringify(data));
+  const ciphertext = encrypt(JSON.stringify(data))
   if (localStorage.getItem(name) !== ciphertext) localStorage.setItem(name, ciphertext)
 }
 
@@ -20,12 +20,12 @@ const setUserData = (data) => {
  * @returns {Object} 使用者資訊
  */
 const getUserData = () => {
-  const ciphertext = localStorage.getItem(name);
+  const ciphertext = localStorage.getItem(name)
 
   if (ciphertext) {
     try {
-      const decryptedStr = decrypt(ciphertext);
-      const data = JSON.parse(decryptedStr);
+      const decryptedStr = decrypt(ciphertext)
+      const data = JSON.parse(decryptedStr)
       return data
     } catch (error) {
       return null
@@ -63,8 +63,8 @@ const encrypt = (data) => {
     iv: iv,
     mode: CryptoJS.mode.CBC,
     padding: CryptoJS.pad.Pkcs7
-  });
-  return encrypted.toString();
+  })
+  return encrypted.toString()
 }
 
 
@@ -78,8 +78,8 @@ const decrypt = (encrypted) => {
     iv: iv,
     mode: CryptoJS.mode.CBC,
     padding: CryptoJS.pad.Pkcs7
-  });
-  return decrypted.toString(CryptoJS.enc.Utf8);
+  })
+  return decrypted.toString(CryptoJS.enc.Utf8)
 }
 
 /* #endregion */

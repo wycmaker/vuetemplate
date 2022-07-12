@@ -1,12 +1,5 @@
-import * as account from '@/apiservices/account'
-
-/* #region Account APIs */
-
-// export const apiLogin = account.login
-
-/* #endregion */
+import * as account from './APIManagement/account'
 
 export const apis = {
-  login: account.login,
-  logout: account.logout
+  ...account
 }

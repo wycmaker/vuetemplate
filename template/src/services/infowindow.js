@@ -1,3 +1,6 @@
+import { toastr } from '@/services/toastr'
+import { MessageBox } from 'element-ui'
+
 let options = {
   "closeButton": false, // 顯示關閉按鈕
   "debug": false, // 除錯
@@ -14,11 +17,10 @@ let options = {
 
 /**
  * 警告視窗
- * @param {Object} target 目標
  * @param {String} message 訊息
  */
-const alert = (target, message) => {
-  target.$alert(message, '', {
+const alert = message => {
+  MessageBox.alert(message, '', {
     confirmButtonText: '確定',
     iconClass: 'el-icon-error',
     callback: action => {},
@@ -28,11 +30,10 @@ const alert = (target, message) => {
 
 /**
  * 確認視窗
- * @param {Object} target 目標
  * @param {String} message 訊息
  */
-const confirm = (target, message) => {
-  return target.$confirm(message, '', {
+const confirm = message => {
+  return MessageBox.confirm(message, '', {
     confirmButtonText: '確定',
     cancelButtonText: '取消',
     iconClass: 'el-icon-info'
@@ -41,38 +42,34 @@ const confirm = (target, message) => {
 
 /**
  * 提醒訊息(成功)
- * @param {Object} target 目標
  * @param {String} message 訊息
  */
-const success = (target, message) => {
-  target.$toastr.success(message, '', options)
+const success = message => {
+  toastr.success(message, '', options)
 }
 
 /**
  * 提醒訊息(失敗)
- * @param {Object} target 目標
  * @param {String} message 訊息
  */
-const error = (target, message) => {
-  target.$toastr.error(message, '', options)
+const error = message => {
+  toastr.error(message, '', options)
 }
 
 /**
  * 提醒訊息(一般)
- * @param {Object} target 目標
  * @param {String} message 訊息
  */
-const info = (target, message) => {
-  target.$toastr.info(message, '', options)
+const info = message => {
+  toastr.info(message, '', options)
 }
 
 /**
  * 提醒訊息(警告)
- * @param {Object} target 目標
  * @param {String} message 訊息
  */
-const warning = (target, message) => {
-  target.$toastr.warning(message, '', options)
+const warning = message => {
+  toastr.warning(message, '', options)
 }
 
 export const infowindow = { alert, confirm, success, error, info, warning }
@@ -83,10 +80,9 @@ export const infowindow = { alert, confirm, success, error, info, warning }
 
 /**
  * http失敗處理
- * @param {Object} toastr 
  * @param {String} message 
  */
-export const httpError = (toastr, message) => {
+export const httpError = message => {
   toastr.error(message, '', options)
 }
 

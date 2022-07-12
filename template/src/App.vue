@@ -29,7 +29,7 @@ export default {
     this.$store.commit('setClientWidth', document.body.clientWidth)
     window.onresize = () => {
       this.$store.commit('setClientWidth', document.body.clientWidth)
-    };
+    }
   },
   methods: {
     /**

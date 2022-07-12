@@ -20,23 +20,23 @@ export const common = {
 
 /* ========== String ========== */
 String.prototype.getPath = function () {
-  return this.substring(2, this.length);
+  return this.substring(2, this.length)
 }
 
 /* =========== Date =========== */
 Date.prototype.addYear = function (years) {
-  this.setFullYear(this.getFullYear() + years);
-  return this;
+  this.setFullYear(this.getFullYear() + years)
+  return this
 }
 
 Date.prototype.addMonth = function (months) {
-  this.setMonth(this.getMonth() + months);
-  return this;
+  this.setMonth(this.getMonth() + months)
+  return this
 }
 
 Date.prototype.addDay = function (days) {
-  this.setDate(this.getDate() + days);
-  return this;
+  this.setDate(this.getDate() + days)
+  return this
 }
 
 Date.prototype.toString = function (delimiters) {

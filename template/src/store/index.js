@@ -1,8 +1,8 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
-import { manager  } from '@/services/userDataManager';
+import Vue from 'vue'
+import Vuex from 'vuex'
+import { manager  } from '@/services/userDataManager'
 
-Vue.use(Vuex);
+Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
@@ -14,13 +14,13 @@ export default new Vuex.Store({
   },
   getters: {
     token: state => {
-      return state.token;
+      return state.token
     },
     isAuthenticated: state => {
       if (!state.token) {
-        return false;
+        return false
       }
-      return state.isAuthenticated;
+      return state.isAuthenticated
     },
   },
   mutations: {
@@ -30,28 +30,28 @@ export default new Vuex.Store({
      * @param {object} info 使用者資訊
      */
     setUserInfo(state, info) {
-      state.userInfo = Object.assign({}, info);
-      state.token = info.token;
-      state.expiryDate = info.expiryDate;
-      manager.setUserData(info);
+      state.userInfo = Object.assign({}, info)
+      state.token = info.token
+      state.expiryDate = info.expiryDate
+      manager.setUserData(info)
     },
     /**
      * 將狀態設為已授權
      * @param {object} state Vuex state物件
      */
     authenticate(state) {
-      state.isAuthenticated = true;
+      state.isAuthenticated = true
     },
     /**
      * 清空state資料
      * @param {object} state Vuex state物件
      */
     clearUserInfo(state) {
-      state.token = null;
-      state.expiryDate = null;
-      state.isAuthenticated = false;
-      state.userInfo = null;
-      manager.clearData();
+      state.token = null
+      state.expiryDate = null
+      state.isAuthenticated = false
+      state.userInfo = null
+      manager.clearData()
     },
     /**
      * 設定當前的clientWidth
@@ -64,4 +64,4 @@ export default new Vuex.Store({
   },
   // 嚴格模式，禁止直接修改 state
   strict: true
-});
+})

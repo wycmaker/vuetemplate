@@ -37,8 +37,9 @@ export default {
      * 登入
      */
     async login() {
+      console.log(this.$api)
       const message = this.$service.validator.login(this.loginAttr.account, this.loginAttr.password)
-      if(message !== 'success') this.$service.info.alert(this, message)
+      if(message !== 'success') this.$service.info.alert(message)
       else {
         try {
           const res = await this.$api.login(this.loginAttr)
@@ -46,12 +47,12 @@ export default {
             const { data } = res
             if(data.item1.isSuccess) {
               this.storeUserInfo(data.item2)
-              this.$service.info.success(this, data.item1.successMessage)
+              this.$service.info.success(data.item1.successMessage)
             }
-            else this.$service.info.error(this, data.item1.exceptionMessage)
+            else this.$service.info.error(data.item1.exceptionMessage)
           }
         } catch(error) {
-          this.$service.info.error(this, error)
+          this.$service.info.error(error)
         }
       }
     },

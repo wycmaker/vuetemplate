@@ -1,7 +1,7 @@
 import store from '../store'
 import router from '../router'
 import Cookies from 'js-cookie'
-import { manager } from '@/services/userDataManager';
+import { manager } from '@/services/userDataManager'
 
 /* #region 頁面路由處理 */
 
