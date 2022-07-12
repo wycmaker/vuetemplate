@@ -1,6 +1,5 @@
 import store from '../store'
 import router from '../router'
-import Cookies from 'js-cookie'
 import { manager } from '@/services/userDataManager'
 
 /* #region 頁面路由處理 */
@@ -25,7 +24,7 @@ export const routerProcess = () => {
 const pageProcess = () => {
   // 判斷是否有其他分頁存在
   const alreadyExist = sessionStorage.getItem('alreadyExist')
-  const count = parseInt(Cookies.get('pages'))
+  const count = parseInt(localStorage.getItem('page'))
 
   if ((count < 1 || isNaN(count)) && !alreadyExist) manager.clearData()
 
@@ -33,17 +32,13 @@ const pageProcess = () => {
   if (!alreadyExist) sessionStorage.setItem('alreadyExist', '1')
 
   // 設定當前分頁數目
-  let setCount = isNaN(count) ? 1 : count + 1
-  Cookies.set('pages', setCount, {
-    sameSite: 'lax'
-  })
+  const setCount = isNaN(count) ? 1 : count + 1
+  localStorage.setItem('page', setCount)
 
   // 關閉分頁處理
   window.onunload = () => {
-    let count = Cookies.get('pages')
-    Cookies.set('pages', parseInt(count) - 1, {
-      sameSite: 'lax'
-    })
+    const count = localStorage.getItem('page')
+    localStorage.setItem('page', parseInt(count) - 1)
   }
 }
 
@@ -64,7 +59,7 @@ const setStore = () => {
      * 1. token未過期 => 將使用者資訊記錄到Vuex中
      * 2. token過期 => 清空localstorage，並將使用者導向登入頁
      */
-    const expiryDate = new Date(data.expiryDate)
+    const expiryDate = new Date(data.expiryDateTime)
     const now = new Date()
     if (now < expiryDate && data.token) {
       store.commit('setUserInfo', data)

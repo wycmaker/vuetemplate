@@ -37,7 +37,6 @@ export default {
      * 登入
      */
     async login() {
-      console.log(this.$api)
       const message = this.$service.validator.login(this.loginAttr.account, this.loginAttr.password)
       if(message !== 'success') this.$service.info.alert(message)
       else {

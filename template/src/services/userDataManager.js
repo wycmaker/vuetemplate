@@ -39,7 +39,7 @@ const getUserData = () => {
  * 從localstorage清除使用者資訊
  */
 const clearData = () => {
-  localStorage.clear()
+  localStorage.removeItem('user.template')
 }
 
 export const manager = {
