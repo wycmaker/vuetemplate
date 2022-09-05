@@ -17,7 +17,7 @@ export default {
   name: 'App',
   provide() {
     return {
-      reloadPage: this.reload
+      reloadPage: this.reload 
     }
   },
   data() {
