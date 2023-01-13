@@ -98,12 +98,12 @@ export default {
         line-height: 80px;
         font-size: 18px;
         background-color: $white-color;
-        border-color: $border-color;
-        color: $font-color-7;
+        border-color: $border-color-1;
+        color: $font-color-5;
       }
 
       .el-input .el-input__clear {
-        color: $font-color-7;
+        color: $font-color-5;
       }
     }
 

@@ -1,6 +1,5 @@
 <template>
-  <div :class="[$style['query-item']]">
-    <label>{{title}}</label>
+  <div style="display:inline-block">
     <el-date-picker
       v-model="startDateValue"
       type="date"
@@ -23,21 +22,16 @@
 </template>
 
 <script>
-
 export default {
   props: {
     startDate: {
-      type: String,
+      type: String|Date,
       default: null
     },
     endDate: {
-      type: String,
+      type: String|Date,
       default: null
     },
-    title: {
-      type: String,
-      default: null
-    }
   },
   data() {
     return {
@@ -56,18 +50,20 @@ export default {
     startChange(val) {
       if(val !== null) {
         if(this.endDateValue === null) {
-          this.endDateValue = new Date(val).toString('/')
+          this.endDateValue = new Date(val).toString('-')
         }
         else if(this.endDateValue !== null && new Date(val).getTime() > new Date(this.endDateValue).getTime()) {
-          this.endDateValue = new Date(val).toString('/')
+          this.endDateValue = new Date(val).toString('-')
         }
       } else this.endDateValue = null
+      this.$emit('change')
     },
     /**
      * 結束日期改變
      */
     endChange(val) {
-      if(val !== null && this.startDateValue === null) this.startDateValue = new Date(val).toString('/')
+      if(val !== null && this.startDateValue === null) this.startDateValue = new Date(val).toString('-')
+      this.$emit('change')
     }
   },
   computed: {

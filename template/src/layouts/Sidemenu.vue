@@ -140,7 +140,7 @@ export default {
       //     ]
       //   }
       // ],
-      currentPath: ''
+      nowActive: ''
     }
   },
   mounted() {
@@ -152,6 +152,7 @@ export default {
       //     if(url.path === pathName) this.oldFold = item.name
       //   })
       // })
+      this.initialActive()
     })
   },
   methods: {
@@ -166,11 +167,13 @@ export default {
      * 轉跳頁面
      */
     changePage(pagePath) {
-      let path = location.hash.toLowerCase().getPath()
-      if(path === pagePath) {
+      let path = this.getActivePath()
+      const currentPath = pagePath.toLowerCase()
+      if(path === currentPath) {
         this.reloadPage()
       } else {
-        this.$router.push('/' + pagePath)
+        this.$router.push(`${this.$foldPath}${pagePath}`)
+        this.nowActive = currentPath
       }
     },
     /**
@@ -186,16 +189,30 @@ export default {
       else {
         this.fold = this.oldFold
       }
+    },
+    /**
+     * 重新整理後的激活狀態
+     */
+    initialActive() {
+      this.nowActive = this.getActivePath()
+    },
+    /**
+     * 取當前激活的Menu
+     */
+    getActivePath() {
+      let path = ''
+      let routeName = this.$route.name
+      if(routeName.toLowerCase() === 'home' || routeName.toLowerCase() === 'medicalchart') path = ''
+      else path = routeName.toLowerCase()
+
+      return path
     }
   },
   computed: {
-		nowActive() {
-      this.currentPath = this.$route.path
-      let path
-      if(this.currentPath === '/') path = ''
-      else path = this.currentPath.substr(1, this.currentPath.length-1).toLowerCase()
-      return path
-		}
+    width() {
+      this.show = true 
+      return this.$store.state.clientWidth
+    }
   }
 }
 </script>

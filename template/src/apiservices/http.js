@@ -1,12 +1,11 @@
 import axios from 'axios'
 import store from '@/store'
-import router from '@/router'
 import { httpError} from '@/services/infowindow'
 import { Loading } from 'element-ui'
 
 /* #region Loading設定 */
 
-let loading
+let loading = []
 
 /**
  * 開始loading
@@ -23,7 +22,7 @@ const startLoading = () => {
  * 結束loading
  */
 const endLoading = () => {
-  loading.close()
+  if(loading) loading.shift().close()
 }
 
 /* #endregion */
@@ -44,6 +43,11 @@ instance.interceptors.request.use((config) => {
   if (!config.headers.Authorization && store.getters.token) {
     config.headers.Authorization = `Bearer ${store.getters.token}`
   }
+
+  // API Logger User Information
+  config.headers['X-System-Account'] = !store.getters.currentUser ? '0' : store.getters.currentUser
+
+  config.headers['Pragma'] = 'no-cache'
 
   startLoading()
   return config
@@ -95,8 +99,7 @@ instance.interceptors.response.use(response => {
     message = (status === 401 || status === 504) ? message : `${message}\nAPI：${url}`
     httpError(message)
     if (status === 401) {
-      store.commit('clearUserInfo')
-      router.push('/login')
+      store.commit('clearUserInfo', 'Login')
     }
   } 
   else return Promise.reject(error)
@@ -115,9 +118,7 @@ const config = {
 export default function (method, url, data = null, isFormData = false) {
   switch (method) {
     case 'get':
-      return instance.get(url, {
-        params: data
-      })
+      return instance.get(url, { params: data })
     case 'post':
       if (!isFormData) return instance.post(url, data)
       else return instance.post(url, data, config)

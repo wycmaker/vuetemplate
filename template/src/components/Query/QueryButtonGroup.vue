@@ -1,8 +1,8 @@
 <template>
   <div :class="[$style['query-item']]">
-    <el-button :class="$style['btn-B']" icon="el-icon-search" v-if="show[0]" @click="getList"></el-button>
-    <el-button :class="$style['btn-B']" icon="el-icon-document-add" v-if="show[1]" @click="createData">新增</el-button>
-    <el-button :class="$style['btn-B']" icon="el-icon-download" v-if="show[2]" @click="exportList" > 匯出</el-button>
+    <el-button :class="[$style['btn-B'], $style.radius]" icon="el-icon-search" v-if="show[0]" @click="getList"> 搜尋</el-button>
+    <el-button :class="[$style['btn-A'], $style.radius]" icon="el-icon-document-add" v-if="show[1]" @click="createData"> 新增</el-button>
+    <el-button :class="[$style['btn-B'], $style.radius]" v-if="show[2]" @click="exportList" >匯　出</el-button>
   </div>
 </template>
 
@@ -41,4 +41,17 @@ export default {
 
 <style lang="scss" module>
   @import '@/assets/css/custom.scss';
+
+  .radius {
+    border-radius: 36px !important;
+    font-size: $font-size-1 !important;
+    font-weight: $font-weight-1 !important;
+  }
+
+  .query-item {
+    :global {
+      @include button-padding-setting(9px 19px !important);
+    }
+    
+  }
 </style>

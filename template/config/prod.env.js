@@ -4,5 +4,6 @@ module.exports = {
   ENV_CONFIG: '"prod"',
   API_ROOT: '""',
   DIST_PATH: '"D:/Publish/template/"',
-  PUBLISH_PATH: '"./"'
+  PUBLISH_PATH: '"./"',
+  FOLDER_PATH: '"/"'
 }

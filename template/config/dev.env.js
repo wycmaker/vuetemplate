@@ -7,5 +7,6 @@ module.exports = merge(prodEnv, {
   ENV_CONFIG: '"dev"',
   API_ROOT: '""',
   DIST_PATH: '"./"',
-  PUBLISH_PATH: '"./"'
+  PUBLISH_PATH: '"./"',
+  FOLDER_PATH: '"/"'
 })

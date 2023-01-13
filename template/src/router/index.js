@@ -2,30 +2,26 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 /* Layout */
-import Header from '@/layouts/Header'
-import SideMenu from '@/layouts/SideMenu'
+const Header = () => import('@/layouts/Header')
+const SideMenu = () => import('@/layouts/SideMenu')
 /* Page */
 /* ===========Main Page============= */
-import Login from '@/pages/Login'
-import Index from '@/pages/Index'
+const Login = () => import('@/pages/Login')
+const Index = () => import('@/pages/Index')
+
+const url = process.env.FOLDER_PATH
 
 
 /* 基礎路由 */
 const baseRoutes = [
   {
-    path: '/Login',
+    name: 'login',
+    path: `${url}/Login`,
     component: Login
   },
   {
-    path: '/',
-    components: {
-      header: Header,
-      sidemenu: SideMenu,
-      default: Index
-    }
-  },
-  {
-    path: '/usermanage',
+    name: 'home',
+    path: url,
     components: {
       header: Header,
       sidemenu: SideMenu,
@@ -34,8 +30,11 @@ const baseRoutes = [
   },
   {
     path: '*',
-    redirect: '/'
+    redirect: url
   }
+]
+
+export let routes = [
 ]
 
 class Router extends VueRouter {
@@ -74,7 +73,7 @@ VueRouter.prototype.replace = function push (location, onResolve, onReject) {
 }
 
 
-export default new Router({
-  mode: 'hash',
+export const router = new Router({
+  mode: 'history',
   routes: baseRoutes,
 })

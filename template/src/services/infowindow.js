@@ -1,29 +1,20 @@
-import { toastr } from '@/services/toastr'
+import { CustomToastr } from '@/plugins/toastr'
 import { MessageBox } from 'element-ui'
 
-let options = {
-  "closeButton": false, // 顯示關閉按鈕
-  "debug": false, // 除錯
-  "newestOnTop": false, // 最新一筆顯示在最上面
-  "progressBar": true, // 顯示隱藏時間進度條
-  "positionClass": "toast-bottom-center", // 位置的類別
-  "preventDuplicates": false, // 隱藏重覆訊息
-  "onclick": null, // 當點選提示訊息時，則執行此函式
-  "timeOut": "1000", // 當超過此設定時間時，則隱藏提示訊息(單位: 毫秒)
-  "extendedTimeOut": "1000",
-}
+const toastr = CustomToastr
 
 /* #region 頁面提醒函數 */
 
 /**
  * 警告視窗
  * @param {String} message 訊息
+ * @param {Function} callback 回呼函數
  */
-const alert = message => {
+const alert = (message, callback = action => {}) => {
   MessageBox.alert(message, '', {
     confirmButtonText: '確定',
     iconClass: 'el-icon-error',
-    callback: action => {},
+    callback: callback,
   })
 }
 
@@ -31,12 +22,26 @@ const alert = message => {
 /**
  * 確認視窗
  * @param {String} message 訊息
+ * @param {String} confirmText confirm button顯示文字
+ * @param {String} cancelText cancel button顯示文字
  */
-const confirm = message => {
+const confirm = (message, confirmText='確定', cancelText='取消') => {
   return MessageBox.confirm(message, '', {
-    confirmButtonText: '確定',
-    cancelButtonText: '取消',
+    confirmButtonText: confirmText,
+    cancelButtonText: cancelText,
     iconClass: 'el-icon-info'
+  })
+}
+
+/**
+ * 輸入視窗
+ * @param {String} message 訊息
+ * @returns 
+ */
+const prompt = message => {
+  return MessageBox.prompt(message, '', {
+    confirmButtonText: '確定',
+    showCancelButton: false
   })
 }
 
@@ -45,7 +50,7 @@ const confirm = message => {
  * @param {String} message 訊息
  */
 const success = message => {
-  toastr.success(message, '', options)
+  toastr({ text: message,  type: 'success' })
 }
 
 /**
@@ -53,7 +58,7 @@ const success = message => {
  * @param {String} message 訊息
  */
 const error = message => {
-  toastr.error(message, '', options)
+  toastr({ text: message,  type: 'danger' })
 }
 
 /**
@@ -61,7 +66,7 @@ const error = message => {
  * @param {String} message 訊息
  */
 const info = message => {
-  toastr.info(message, '', options)
+  toastr({ text: message,  type: 'info' })
 }
 
 /**
@@ -69,10 +74,10 @@ const info = message => {
  * @param {String} message 訊息
  */
 const warning = message => {
-  toastr.warning(message, '', options)
+  toastr({ text: message,  type: 'wraning' })
 }
 
-export const infowindow = { alert, confirm, success, error, info, warning }
+export const infowindow = { alert, confirm, prompt, success, error, info, warning }
 
 /* #endregion */
 
@@ -83,7 +88,7 @@ export const infowindow = { alert, confirm, success, error, info, warning }
  * @param {String} message 
  */
 export const httpError = message => {
-  toastr.error(message, '', options)
+  toastr({ text: message,  type: 'danger' })
 }
 
 /* #endregion */

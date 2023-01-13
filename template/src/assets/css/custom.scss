@@ -3,20 +3,20 @@
 
 .content {
   @include block-size-setting(unset, calc(100vh - 100px), left, unset, 20px, unset);
-  @include font-setting(20px, normal, $font-color);
+  @include font-setting(20px, normal, $font-color-1);
   overflow-y: auto;
 
   :global {
 
-    @include tabs-setting($font-color-5, 22px, unset, $font-color-12, $hover-color-6);
+    @include tabs-setting($font-color-5, 22px, unset, $font-color-5, $hover-color-6);
 
     @include button-padding-setting();
 
-    @include checkbox-setting(18px, 18px, 0px, 5px, 6px, 10px, $button-color-2, $font-color);
+    @include checkbox-setting(18px, 18px, 0px, 5px, 6px, 10px, $button-color-2, $font-color-1);
 
-    @include radio-setting(18px, 18px, 8px, 8px, $button-color-2, $font-color, 18px, 5px);
+    @include radio-setting(18px, 18px, 8px, 8px, $button-color-2, $font-color-1, 18px, 5px);
 
-    @include input-setting($font-color-7, $white-color, $border-color-1, $font-color-10);
+    @include input-setting($font-color-5, $white-color, $border-color-1, $font-color-5);
 
     .el-divider--horizontal {
       margin: 5px 0;
@@ -31,7 +31,7 @@
 .form {
   @include block-size-setting(calc(100% - 40px), unset, inherit, $white-color, 15px, unset);
   border-radius: 10px;
-  @include border-setting(border, solid, $border-color-2);
+  @include border-setting(border, solid, $border-color-1);
 
   :global {
 
@@ -42,7 +42,7 @@
     }
 
     .el-form-item__label {
-      @include font-setting(20px, bold, $font-color-9);
+      @include font-setting(20px, bold, $font-color-5);
     }
 
     .el-input__count-inner, .el-input__count {
@@ -53,7 +53,7 @@
       font-size: 18px;
     }
 
-    @include input-setting($font-color, $white-color);
+    @include input-setting($font-color-1, $white-color);
     @include input-width(100%);
 
     .el-divider {
@@ -72,7 +72,7 @@
   }
 
   &-info {
-    @include font-setting(22px, bold, $font-color);
+    @include font-setting(22px, bold, $font-color-1);
   }
 }
 
@@ -97,7 +97,7 @@
   }
 
   & label {
-    @include font-setting(18px, bold, $font-color-9);
+    @include font-setting(18px, bold, $font-color-5);
   }
 
   &-item {
@@ -163,15 +163,15 @@
 
 .table {
   &-A {
-    @include table-setting($border-color-2, $font-color-7, 10px, unset, $button-color-1, $background-color, $hover-color, $border-color-3, $white-color, 18px);
+    @include table-setting($border-color-1, $font-color-5, 10px, unset, $button-color-1, $background-color, $hover-color, $border-color-1, $white-color, 18px);
   }
   
   &-B {
-    @include table-setting($border-color-1, $font-color-7, 5px, $border-color-1, $button-color-2, unset, $hover-color-5, $font-color-7, $background-color-1, 18px);
+    @include table-setting($border-color-1, $font-color-5, 5px, $border-color-1, $button-color-2, unset, $hover-color-5, $font-color-5, $background-color-1, 18px);
   }
 
   &-C {
-    @include table-setting(unset, unset, unset, unset, unset, unset, unset, $font-color-11, unset, 18px);
+    @include table-setting(unset, unset, unset, unset, unset, unset, unset, $font-color-5, unset, 18px);
   }
 }
 

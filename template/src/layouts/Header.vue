@@ -1,7 +1,8 @@
 <template>
   <div>
     <div :class="$style.background">
-      <div style="width: 20px">
+      <div style="width: 300px">
+        <main-title :title="title" :need-back="needBack" :move-title="isMove" @back="backToList"></main-title>
       </div>
       <div v-if="$store.state.userInfo !== null">
         <div style="display:inline-block;">
@@ -16,11 +17,12 @@
 </template>
 
 <script>
-
+import MainTitle from '@/components/MainTitle.vue'
 export default {
+  components: { MainTitle },
   data() {
     return {
-
+      isMove: false
     }
   },
   mounted() {
@@ -28,7 +30,7 @@ export default {
   },
   methods: {
     /**
-     * 登出
+     * changePage
      */
     async logout() {
       try {
@@ -44,7 +46,21 @@ export default {
       catch(err) {
         this.$service.info.error(this, err)
       }
-    }
+    },
+    /**
+     * 返回列表
+     */
+    backToList() {
+      let path = this.$route.path
+      if(path.includes('/Medical/')) this.$router.push(this.$foldPath)
+    },
+    /**
+     * 移動標題
+     * @param {boolean} show 側邊欄是否顯示
+     */
+    moveTitle(show) {
+      this.isMove = !show
+    },
   }
 }
 </script>

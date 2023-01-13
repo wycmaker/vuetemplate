@@ -1,8 +1,8 @@
 <template>
   <div :class="$style.center">
-    <el-button :class="$style['btn-B']" icon="el-icon-edit" :disabled="disable[0]" v-if="show[0]" @click="updateItem(scope.$index)"></el-button>
-    <el-button :class="$style['btn-B']" icon="el-icon-view" :disabled="disable[1]" v-if="show[1]" @click="watchItem(scope.$index)"></el-button>
-    <el-button :class="(isDelete == true) ? $style['btn-C'] : $style['btn-E']" :icon="(isDelete == true) ? 'el-icon-delete' : 'el-icon-setting'" :disabled="disable[2]" v-if="show[2]" @click="deleteItem(scope.$index)"></el-button>
+    <el-button :class="$style['btn-B']" icon="el-icon-edit" :disabled="scope.row.editable()" v-if="show[0]" @click="updateItem(scope.$index)"></el-button>
+    <el-button :class="$style['btn-B']" icon="el-icon-view" :disabled="scope.row.watchable" v-if="show[1]" @click="watchItem(scope.$index)"></el-button>
+    <el-button :class="(isDelete == true) ? $style['btn-B'] : $style['btn-E']" :icon="(isDelete == true) ? 'el-icon-delete' : 'el-icon-setting'" :disabled="scope.row.deleteable()" v-if="show[2]" @click="deleteItem(scope.$index)"></el-button>
   </div>
 </template>
 
@@ -27,11 +27,6 @@ export default {
     isDelete: {
       type: Boolean,
       dafault: true
-    }
-  },
-  data() {
-    return {
-      loading: false
     }
   },
   methods: {

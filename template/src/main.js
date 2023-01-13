@@ -7,12 +7,13 @@ import ElementUI from 'element-ui'
 import lang from 'element-ui/lib/locale/lang/zh-TW'
 import locale from 'element-ui/lib/locale'
 import 'element-ui/lib/theme-chalk/index.css'
-import router from './router'
+import { router } from './router'
 import { routerProcess} from '@/services/routerProcess.js'
 import '@/services/browserJudge.js'
 import { apis} from '@/apiservices'
 import { services } from '@/services'
-import '@/services/toastr'
+import '@/plugins/directive'
+import '@/services/registerComponents'
 
 Vue.use(ElementUI)
 locale.use(lang)
@@ -24,6 +25,7 @@ Vue.config.devtools = (process.env.NODE_ENV === 'dev')
 
 Vue.prototype.$api = apis
 Vue.prototype.$service = services
+Vue.prototype.$foldPath = process.env.FOLDER_PATH
 
 /* #endregion */
 

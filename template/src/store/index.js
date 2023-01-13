@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import { manager  } from '@/services/userDataManager'
+import { router } from '../router'
+const url = process.env.FOLDER_PATH
 
 Vue.use(Vuex)
 
@@ -21,6 +23,10 @@ export default new Vuex.Store({
         return false
       }
       return state.isAuthenticated
+    },
+    currentUser: state => {
+      if(state.userInfo !== null) return state.userInfo.userInfoID
+      else return ''
     },
   },
   mutations: {
@@ -45,13 +51,15 @@ export default new Vuex.Store({
     /**
      * 清空state資料
      * @param {object} state Vuex state物件
+     * @param {string} path 跳轉路徑
      */
-    clearUserInfo(state) {
+    clearUserInfo(state, path) {
       state.token = null
       state.expiryDate = null
       state.isAuthenticated = false
       state.userInfo = null
       manager.clearData()
+      router.push(`${url}${path}`)
     },
     /**
      * 設定當前的clientWidth

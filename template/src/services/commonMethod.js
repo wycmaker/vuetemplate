@@ -1,17 +1,29 @@
 /* #region Export Function  */
 
+
 /**
- * 取得Table Index欄位的值
- * @param {number} index 索引值
- * @param {number} currentPage 當前頁面
- * @param {number} pageSize 頁面資料數
+ * 依選項做排序
+ * @param {Array} data 選擇的數值列表
+ * @param {Array} options 所有選項列表
+ * @returns 
  */
-const configIndex = (index, currentPage, pageSize) => {
-  return index + 1 + (currentPage - 1) * pageSize
+const sortValue = (data, options) => {
+  // 依欄位數值排序
+  let arr = []
+  data.forEach(item => {
+    let index = options.findIndex(r => r.label === item)
+    arr.push(index)
+  })
+  arr = arr.sortBySeq('AES')
+  let result = []
+  arr.forEach(item => {
+    if(item !== -1) result.push(options[item].label)
+  })
+  return result
 }
 
 export const common = { 
-  configIndex: configIndex
+  sortValue: sortValue
 }
 
 /* #endregion */
@@ -48,6 +60,15 @@ Date.prototype.toString = function (delimiters) {
 
 Array.prototype.Sum = function() {
   return this.reduce((a, b) => { return a + b })
+}
+
+Array.prototype.sortByKey = function(key) {
+  return this.sort((a, b) => { return a[key] > b[key] ? 1 : -1 })
+}
+
+Array.prototype.sortBySeq = function(seq) {
+  if(seq === "AES") return this.sort((a, b) => { return a > b ? 1 : -1 })
+  else return this.sort((a, b) => { return a < b ? 1 : -1 })
 }
 
 /* #endregion */

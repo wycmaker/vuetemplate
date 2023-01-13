@@ -1,5 +1,11 @@
 import { infowindow } from '@/services/infowindow'
 import { validator } from '@/services/validate'
 import { common } from '@/services/commonMethod'
+import { encryptHex, decryptHex } from '@/services/crypto'
 
-export const services = { common, validator, info: infowindow }
+const crypto = {
+  encrypt: encryptHex,
+  decrypt: decryptHex
+}
+
+export const services = { common, validator, info: infowindow, crypto }

@@ -1,5 +1,5 @@
 <template>
-  <div :class="[$style.block, (needBack === false) ? $style['title-normal'] : $style['title-back']]">
+  <div :class="[$style.block, (needBack === false) ? $style['title-normal'] : null, moveTitle === true ? $style['title-move'] : $style['title-close']]">
     <el-button v-if="needBack" @click="goBack" :class="[$style.btn]">
       <i class="el-icon-back"></i>
     </el-button>
@@ -15,6 +15,10 @@ export default {
       default: null
     },
     'need-back': {
+      type: Boolean,
+      default: false
+    },
+    'move-title': {
       type: Boolean,
       default: false
     }
@@ -39,9 +43,9 @@ export default {
   }
 
   .btn {
-    @include button-color-setting($white-color, $subtitle-color, $subtitle-color, $white-color, $subtitle-color, $subtitle-color, $hover-color-2);
-    border-radius: 20px;
-    padding: 12px;
+    @include button-color-setting($white-color, $subtitle-color, $subtitle-color, $white-color, $subtitle-color, $subtitle-color, $hover-color-6);
+    border-radius: 20px !important;
+    padding: 12px !important;
   }
 
   .title {
@@ -49,10 +53,20 @@ export default {
 
     &-normal {
       margin-bottom: 0px;
+
+      & h1 {
+        margin: 0;
+      }
     }
 
-    &-back {
-      margin-bottom: 20px;
+    &-move {
+      margin-left: 70px;
+      transition: margin-left 0.4s;
+    }
+
+    &-close {
+      margin-left: 0px;
+      transition: margin-left 0.4s;
     }
   }
 </style>

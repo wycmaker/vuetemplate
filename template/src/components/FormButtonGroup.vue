@@ -1,12 +1,27 @@
 <template>
   <div :class="$style.center">
-    <el-button :class="$style['btn-B']" v-loading="loading" @click="confirm">確定</el-button>
-    <el-button :class="$style['btn-C']" :disabled="loading" @click="cancel">取消</el-button>
+    <el-button :class="$style['btn-B']" v-loading="loading" @click="confirm" v-if="show[0]">{{ confirmText }}</el-button>
+    <el-button :class="$style['btn-C']" :disabled="loading" @click="cancel" v-if="show[1]">{{ cancelText }}</el-button>
+    <slot></slot>
   </div>
 </template>
 
 <script>
 export default {
+  props: {
+    show: {
+      type: Array,
+      default: () => { return [ true, true ] }
+    },
+    cancelText: {
+      type: String,
+      default: '取消'
+    },
+    confirmText: {
+      type: String,
+      default: '確定'
+    }
+  },
   data() {
     return {
       loading: false

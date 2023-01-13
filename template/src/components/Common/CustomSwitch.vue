@@ -2,8 +2,8 @@
   <div>
     <el-switch
       v-model="enable"
-      active-color="#81C6AA"
-      inactive-color="#809B8D"
+      active-color="#616AFE"
+      inactive-color="#8686BC"
       :active-text="switchText[0]"
       :inactive-text="switchText[1]"
       @change="onChange"

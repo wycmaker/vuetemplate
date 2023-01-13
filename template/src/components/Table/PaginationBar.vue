@@ -41,7 +41,7 @@ export default {
      */
     sizeChange(size) {
       this.pageSizeValue = size
-      this.$emit('changeSize', size)
+      this.$emit('handlePageChange', {page: this.currentPageValue, size: size, isChange: false})
     },
     /**
      * 頁面變更函數
@@ -49,7 +49,7 @@ export default {
      */
     currentChange(page) {
       this.currentPageValue = page
-      this.$emit('changeCurrent', page)
+      this.$emit('handlePageChange', {page, size: this.pageSizeValue, isChange: true})
     },
   },
   computed: {
@@ -90,10 +90,10 @@ export default {
 
     :global {
       .el-pagination__total, .el-input__inner, .el-pagination__jump {
-        @include font-setting(14px, unset, $font-color-9);
+        @include font-setting(14px, unset, $font-color-1);
       }
       
-      @include input-setting($font-color-9, $white-color, $button-color-3);
+      @include input-setting($font-color-1, $white-color, $border-color-1);
 
       .el-select .el-input__inner,
       .el-select .el-input__inner:focus, 
@@ -101,15 +101,15 @@ export default {
       .el-pagination__editor.el-input .el-input__inner,
       .el-pagination__editor.el-input .el-input__inner:hover:focus, 
       .el-pagination__editor.el-input .el-input__inner:hover:hover {
-        border-color: $button-color-3;
+        border-color: $border-color-1;
       }
 
       .el-pager li, .btn-prev, .btn-next{
-        @include pager-color-setting($font-color-8, $white-color, $border-color-1);
+        @include pager-color-setting($font-color-3, $white-color, $border-color-1);
       }
 
       .el-pager li.active{
-        @include pager-color-setting($white-color, $button-color-2, $button-color-2);
+        @include pager-color-setting($white-color, $border-color-1, $border-color-1);
       }
 
       .el-input--mini .el-input__inner {

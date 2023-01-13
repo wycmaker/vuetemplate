@@ -1,6 +1,10 @@
 import store from '../store'
-import router from '../router'
+import { router, routes } from '../router'
 import { manager } from '@/services/userDataManager'
+import { services } from '@/services'
+import { apis } from '@/apiservices'
+
+const url = process.env.FOLDER_PATH
 
 /* #region 頁面路由處理 */
 
@@ -73,7 +77,6 @@ const setStore = () => {
  * 清空使用者資訊，並導向登入頁
  */
 const clearUserData = () => {
-  router.push('/login')
   manager.clearData()
 }
 
@@ -94,19 +97,21 @@ const pathProcess = () => {
     // 取得使用者資訊
     const data = manager.getUserData()
 
-    // 取得欲前往的頁面
-    const path = to.path.toUpperCase()
+    // 取得欲前往的頁面名稱
+    const name = to.name.toLowerCase()
 
     /**
-     * 1. 已登入，前往登入頁面 => 自動導向首頁
-     * 2. 已登入，不是前往登入頁 => 前往目標頁面
-     * 3. 未登入，前往登入頁面 => 前往目標頁面(登入頁)
-     * 4. 未登入，不是前往登入頁 => 自動導向登入頁
+     * 1. 已登入 => 自動導向首頁
+     * 2. 未登入 => 進行SSO Token驗證
      */
-    if (data && path === '/LOGIN') next({ path: '/' })
-    else if (data && path !== '/LOGIN') next()
-    else if (!data && path === '/LOGIN') next()
-    else next({ path: '/login' })
+    if (data) {
+      setRoute(data.accountType)
+      let index = router.routes.findIndex(r => r.name == name)
+      if(index !== -1) next()
+      else next(`${url}/`)
+    }
+    else if(!data && name === 'login') next()
+    else next(`${url}/login`)
   })
 }
 

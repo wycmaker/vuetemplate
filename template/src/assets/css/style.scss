@@ -62,7 +62,7 @@
   }
 
   .el-tabs__item.is-disabled {
-    color: $font-color-6;
+    color: $font-color-5;
   }
 
   .el-tabs--card>.el-tabs__header .el-tabs__item:first-child.is-active {
@@ -276,7 +276,7 @@
 }
 
 /** input setting(el-input, el-select, el-datepicker, el-textarea) **/
-@mixin input-setting($color: unset, $backgroundColor: unset, $borderColor: unset, $placeholder-color:$font-color-7) {
+@mixin input-setting($color: unset, $backgroundColor: unset, $borderColor: unset, $placeholder-color:$font-color-5) {
   .el-select .el-input__inner,
   .el-input .el-input__inner,
   .el-input.is-disabled .el-input__inner,
@@ -397,7 +397,7 @@
 @mixin form-outer-setting($padding, $width:unset, $height: unset, $left: unset, $margin: unset) {
 
   @include block-size-setting($width, $height, unset, $white-color, $padding, unset);
-  @include border-setting(border, solid, $border-color-2);
+  @include border-setting(border, solid, $border-color-1);
 
   border-radius: 10px;
   position: relative;
